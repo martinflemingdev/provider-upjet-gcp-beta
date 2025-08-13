@@ -10,7 +10,7 @@ require (
 	github.com/crossplane/upjet/v2 v2.0.0-20250804114937-4c6bfc216d3b
 	github.com/hashicorp/terraform-json v0.25.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
-	github.com/hashicorp/terraform-provider-google-beta v1.20.1-0.20250610151054-ddaee814b79f
+	github.com/hashicorp/terraform-provider-google-beta v1.20.1-0.20250812173325-375b47bde290
 	github.com/pkg/errors v0.9.1
 	google.golang.org/grpc v1.73.0
 	k8s.io/api v0.33.0
@@ -32,7 +32,7 @@ require (
 	cloud.google.com/go/iam v1.5.2 // indirect
 	cloud.google.com/go/longrunning v0.6.7 // indirect
 	cloud.google.com/go/monitoring v1.24.2 // indirect
-	github.com/GoogleCloudPlatform/declarative-resource-client-library v1.79.0 // indirect
+	github.com/GoogleCloudPlatform/declarative-resource-client-library v1.80.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b // indirect
 	github.com/antchfx/htmlquery v1.2.4 // indirect
