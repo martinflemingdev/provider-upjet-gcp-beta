@@ -18,6 +18,12 @@ import (
 	nodepool "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/container/nodepool"
 	servertlspolicy "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/networksecurity/servertlspolicy"
 	providerconfig "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/providerconfig"
+	dataset "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/dataset"
+	endpoint "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/endpoint"
+	endpointiammember "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/endpointiammember"
+	featurestore "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/featurestore"
+	featurestoreentitytype "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/featurestoreentitytype"
+	tensorboard "github.com/upbound/provider-gcp-beta/internal/controller/namespaced/vertexai/tensorboard"
 )
 
 // Setup_monolith creates all controllers with the supplied logger and adds them to
@@ -33,6 +39,12 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		nodepool.Setup,
 		servertlspolicy.Setup,
 		providerconfig.Setup,
+		dataset.Setup,
+		endpoint.Setup,
+		endpointiammember.Setup,
+		featurestore.Setup,
+		featurestoreentitytype.Setup,
+		tensorboard.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -54,6 +66,12 @@ func SetupGated_monolith(mgr ctrl.Manager, o controller.Options) error {
 		nodepool.SetupGated,
 		servertlspolicy.SetupGated,
 		providerconfig.SetupGated,
+		dataset.SetupGated,
+		endpoint.SetupGated,
+		endpointiammember.SetupGated,
+		featurestore.SetupGated,
+		featurestoreentitytype.SetupGated,
+		tensorboard.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

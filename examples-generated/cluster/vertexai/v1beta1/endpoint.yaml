@@ -1,0 +1,28 @@
+apiVersion: vertexai.gcp-beta.upbound.io/v1beta1
+kind: Endpoint
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vertexai/v1beta1/endpoint
+  labels:
+    testing.upbound.io/example-name: endpoint
+  name: endpoint
+spec:
+  forProvider:
+    description: A sample vertex endpoint
+    displayName: sample-endpoint
+    encryptionSpec:
+    - kmsKeyName: kms-name
+    labels:
+      label-one: value-one
+    location: us-central1
+    network: projects/${data.google_project.project.number}/global/networks/${google_compute_network.vertex_network.name}
+    predictRequestResponseLoggingConfig:
+    - bigqueryDestination:
+      - outputUri: bq://${data.google_project.project.project_id}.${google_bigquery_dataset.bq_dataset.dataset_id}.request_response_logging
+      enabled: true
+      samplingRate: 0.1
+    region: us-central1
+    trafficSplit: |-
+      ${jsonencode({
+          "12345" = 100
+        })}

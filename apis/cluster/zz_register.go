@@ -17,6 +17,7 @@ import (
 	v1beta1networksecurity "github.com/upbound/provider-gcp-beta/apis/cluster/networksecurity/v1beta1"
 	v1alpha1 "github.com/upbound/provider-gcp-beta/apis/cluster/v1alpha1"
 	v1beta1cluster "github.com/upbound/provider-gcp-beta/apis/cluster/v1beta1"
+	v1beta1vertexai "github.com/upbound/provider-gcp-beta/apis/cluster/vertexai/v1beta1"
 )
 
 func init() {
@@ -29,6 +30,7 @@ func init() {
 		v1beta1networksecurity.SchemeBuilder.AddToScheme,
 		v1alpha1.SchemeBuilder.AddToScheme,
 		v1beta1cluster.SchemeBuilder.AddToScheme,
+		v1beta1vertexai.SchemeBuilder.AddToScheme,
 	)
 }
 

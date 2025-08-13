@@ -180,8 +180,9 @@ pull-docs:
 	rm -fR "$(WORK_DIR)/$(notdir $(TERRAFORM_PROVIDER_REPO))"
 	git clone -c advice.detachedHead=false --depth 1 --filter=blob:none --branch "v$(TERRAFORM_PROVIDER_VERSION)" --sparse "$(TERRAFORM_PROVIDER_REPO)" "$(WORK_DIR)/$(notdir $(TERRAFORM_PROVIDER_REPO))";
 	@git -C "$(WORK_DIR)/$(notdir $(TERRAFORM_PROVIDER_REPO))" sparse-checkout set "$(TERRAFORM_DOCS_PATH)"
-	@# workaround for being unable override raw registry data. To be tracked in upjet.
-	# @rm .work/terraform-provider-google-beta/website/docs/r/model_armor_template.html.markdown
+# 	@# workaround for being unable override raw registry data. To be tracked in upjet.
+# 	# @rm .work/terraform-provider-google-beta/website/docs/r/model_armor_template.html.markdown
+	rm -f $(WORK_DIR)/$(notdir $(TERRAFORM_PROVIDER_REPO))/website/docs/r/model_armor_template.html.markdown
 
 generate.init: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
 
