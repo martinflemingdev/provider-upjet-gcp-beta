@@ -42,6 +42,21 @@ var terraformPluginSDKExternalNameConfigs = map[string]config.ExternalName{
 	"google_compute_region_security_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/regions/{{ .parameters.region }}/securityPolicies/{{ .external_name }}"),
 	// Imported by using projects/{{project}}/regions/{{region}}/backendServices/{{name}}
 	"google_compute_region_backend_service": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/regions/{{ .parameters.region }}/backendServices/{{ .external_name }}"),
+
+	// vertexai
+	//
+	// No Import
+	"google_vertex_ai_dataset": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{region}}/featurestores/{{name}}
+	"google_vertex_ai_featurestore": config.IdentifierFromProvider,
+	// Imported by using the following {{featurestore}}/entityTypes/{{name}}
+	"google_vertex_ai_featurestore_entitytype": config.IdentifierFromProvider,
+	// Imported by using the following projects/{{project}}/locations/{{region}}/tensorboards/{{name}}
+	"google_vertex_ai_tensorboard": config.TemplatedStringAsIdentifier("display_name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.region }}/tensorboards/{{ .external_name }}"),
+	// Imported by using the following projects/{{project}}/locations/{{location}}/endpoints/{{name}}
+	"google_vertex_ai_endpoint": config.TemplatedStringAsIdentifier("name", "projects/{{ .setup.configuration.project }}/locations/{{ .parameters.location }}/endpoints/{{ .external_name }}"),
+	// // Imported by using the following projects/{{project}}/locations/{{location}}/endpoints/{{name}} roles/viewer user:jane@example.com
+	"google_vertex_ai_endpoint_iam_member": config.IdentifierFromProvider,
 }
 
 // cliReconciledExternalNameConfigs contains all external name configurations
