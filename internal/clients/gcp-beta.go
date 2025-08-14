@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/fieldpath"
@@ -111,6 +112,41 @@ func TerraformSetupBuilder(tfProvider *schema.Provider) terraform.SetupFn { //no
 		if err == nil && resourceProject != "" {
 			ps.Configuration[keyProject] = resourceProject
 		}
+
+		// --- BEGIN: per-resource region/zone derivation ---
+		// Some TF resources (e.g., Vertex AI Endpoint IAM) consult provider-level
+		// region/zone even when a resource-level "location" exists. Derive region/zone
+		// from the MR so each resource can pick its own region without global envs.
+		// Preference order:
+		//   1) spec.forProvider.region
+		//   2) spec.forProvider.location
+		//   3) spec.initProvider.region
+		//   4) spec.initProvider.location
+		//   5) parse from spec.forProvider.endpoint (projects/.../locations/<loc>/endpoints/...)
+		if v, err := p.GetString("spec.forProvider.region"); err == nil && v != "" {
+			ps.Configuration["region"] = v
+		} else if v, err := p.GetString("spec.forProvider.location"); err == nil && v != "" {
+			ps.Configuration["region"] = v
+		} else if v, err := p.GetString("spec.initProvider.region"); err == nil && v != "" {
+			ps.Configuration["region"] = v
+		} else if v, err := p.GetString("spec.initProvider.location"); err == nil && v != "" {
+			ps.Configuration["region"] = v
+		} else if ep, err := p.GetString("spec.forProvider.endpoint"); err == nil && ep != "" {
+			parts := strings.Split(ep, "/")
+			for i := 0; i < len(parts)-1; i++ {
+				if parts[i] == "locations" && i+1 < len(parts) {
+					ps.Configuration["region"] = parts[i+1]
+					break
+				}
+			}
+		}
+		// Optional: zone if present on the MR
+		if z, err := p.GetString("spec.forProvider.zone"); err == nil && z != "" {
+			ps.Configuration["zone"] = z
+		} else if z, err := p.GetString("spec.initProvider.zone"); err == nil && z != "" {
+			ps.Configuration["zone"] = z
+		}
+		// --- END: per-resource region/zone derivation ---
 
 		switch pcSpec.Credentials.Source { //nolint:exhaustive
 		case xpv1.CredentialsSourceInjectedIdentity:
