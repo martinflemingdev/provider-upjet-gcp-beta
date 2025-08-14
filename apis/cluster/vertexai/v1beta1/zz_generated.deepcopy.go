@@ -1014,6 +1014,16 @@ func (in *EndpointIAMMemberInitParameters) DeepCopyInto(out *EndpointIAMMemberIn
 		*out = new(string)
 		**out = **in
 	}
+	if in.EndpointRef != nil {
+		in, out := &in.EndpointRef, &out.EndpointRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.EndpointSelector != nil {
+		in, out := &in.EndpointSelector, &out.EndpointSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Location != nil {
 		in, out := &in.Location, &out.Location
 		*out = new(string)
@@ -1145,6 +1155,16 @@ func (in *EndpointIAMMemberParameters) DeepCopyInto(out *EndpointIAMMemberParame
 		in, out := &in.Endpoint, &out.Endpoint
 		*out = new(string)
 		**out = **in
+	}
+	if in.EndpointRef != nil {
+		in, out := &in.EndpointRef, &out.EndpointRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.EndpointSelector != nil {
+		in, out := &in.EndpointSelector, &out.EndpointSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Location != nil {
 		in, out := &in.Location, &out.Location

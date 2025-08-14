@@ -123,8 +123,8 @@ type TensorboardParameters struct {
 	Project *string `json:"project,omitempty" tf:"project,omitempty"`
 
 	// The region of the tensorboard. eg us-central1
-	// +kubebuilder:validation:Optional
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
+	// +kubebuilder:validation:Required
+	Region *string `json:"region" tf:"region,omitempty"`
 }
 
 // TensorboardSpec defines the desired state of Tensorboard

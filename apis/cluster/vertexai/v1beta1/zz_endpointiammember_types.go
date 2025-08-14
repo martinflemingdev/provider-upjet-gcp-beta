@@ -44,7 +44,16 @@ type ConditionParameters struct {
 type EndpointIAMMemberInitParameters struct {
 	Condition *ConditionInitParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/vertexai/v1beta1.Endpoint
 	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
+
+	// Reference to a Endpoint in vertexai to populate endpoint.
+	// +kubebuilder:validation:Optional
+	EndpointRef *v1.Reference `json:"endpointRef,omitempty" tf:"-"`
+
+	// Selector for a Endpoint in vertexai to populate endpoint.
+	// +kubebuilder:validation:Optional
+	EndpointSelector *v1.Selector `json:"endpointSelector,omitempty" tf:"-"`
 
 	Location *string `json:"location,omitempty" tf:"location,omitempty"`
 
@@ -78,8 +87,17 @@ type EndpointIAMMemberParameters struct {
 	// +kubebuilder:validation:Optional
 	Condition *ConditionParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/vertexai/v1beta1.Endpoint
 	// +kubebuilder:validation:Optional
 	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
+
+	// Reference to a Endpoint in vertexai to populate endpoint.
+	// +kubebuilder:validation:Optional
+	EndpointRef *v1.Reference `json:"endpointRef,omitempty" tf:"-"`
+
+	// Selector for a Endpoint in vertexai to populate endpoint.
+	// +kubebuilder:validation:Optional
+	EndpointSelector *v1.Selector `json:"endpointSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
 	Location *string `json:"location,omitempty" tf:"location,omitempty"`
@@ -130,7 +148,6 @@ type EndpointIAMMemberStatus struct {
 type EndpointIAMMember struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.endpoint) || (has(self.initProvider) && has(self.initProvider.endpoint))",message="spec.forProvider.endpoint is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.member) || (has(self.initProvider) && has(self.initProvider.member))",message="spec.forProvider.member is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.role) || (has(self.initProvider) && has(self.initProvider.role))",message="spec.forProvider.role is a required parameter"
 	Spec   EndpointIAMMemberSpec   `json:"spec"`

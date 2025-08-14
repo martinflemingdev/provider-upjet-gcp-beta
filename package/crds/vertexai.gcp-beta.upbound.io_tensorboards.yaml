@@ -102,6 +102,8 @@ spec:
                   region:
                     description: The region of the tensorboard. eg us-central1
                     type: string
+                required:
+                - region
                 type: object
               initProvider:
                 description: |-

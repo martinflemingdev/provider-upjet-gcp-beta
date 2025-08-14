@@ -21,6 +21,7 @@ import (
 	"github.com/upbound/provider-gcp-beta/config/cluster/compute"
 	"github.com/upbound/provider-gcp-beta/config/cluster/container"
 	"github.com/upbound/provider-gcp-beta/config/cluster/networksecurity"
+	"github.com/upbound/provider-gcp-beta/config/cluster/vertexai"
 	"github.com/upbound/provider-gcp-beta/hack"
 )
 
@@ -90,7 +91,8 @@ func GetProvider(_ context.Context, sdkProvider *schema.Provider, generationProv
 		container.Configure,
 		networksecurity.Configure,
 		compute.Configure,
-	} {
+		vertexai.Configure, // Added to generate Id and Selector fields for Vertex AI IAM resources
+ 	} {
 		configure(pc)
 	}
 
