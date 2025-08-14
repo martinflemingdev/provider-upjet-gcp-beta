@@ -19,14 +19,14 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("google_vertex_ai_endpoint_iam_member", func(r *config.Resource) {
 		// 1) make region explicit to avoid the resolver error (same as above) https://github.com/hashicorp/terraform-provider-google/issues/21026
-		config.MarkAsRequired(r.TerraformResource, "region")
+		// config.MarkAsRequired(r.TerraformResource, "region")
 
 		// 2) wire up references so endpointRef/endpointSelector are generated
 		r.References["endpoint"] = config.Reference{
 			TerraformName: "google_vertex_ai_endpoint",
 			// If you still hit issues after adding region, uncomment this so
 			// endpointRef resolves to the full resource name from observation:
-			// Extractor: "github.com/crossplane/upjet/pkg/resource.ExtractParamPath(\"id\", true)",
+			Extractor: "github.com/crossplane/upjet/pkg/resource.ExtractParamPath(\"id\", true)",
 		}
 	})
 }
