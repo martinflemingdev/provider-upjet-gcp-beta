@@ -26,7 +26,7 @@ func Configure(p *config.Provider) {
 			TerraformName: "google_vertex_ai_endpoint",
 			// If you still hit issues after adding region, uncomment this so
 			// endpointRef resolves to the full resource name from observation:
-			Extractor: "github.com/crossplane/upjet/pkg/resource.ExtractParamPath(\"id\", true)",
+			Extractor: "github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath(\"id\", true)",
 		}
 	})
 }
