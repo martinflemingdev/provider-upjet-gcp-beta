@@ -11,7 +11,6 @@ import (
 	reference "github.com/crossplane/crossplane-runtime/v2/pkg/reference"
 	xpresource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 	resource "github.com/crossplane/upjet/v2/pkg/resource"
-	resource1 "github.com/crossplane/upjet/v2/pkg/resource"
 	errors "github.com/pkg/errors"
 	apisresolver "github.com/upbound/provider-gcp-beta/internal/apis"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
@@ -85,7 +84,7 @@ func (mg *FeaturestoreEntitytype) ResolveReferences(ctx context.Context, c clien
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Featurestore),
-			Extract:      resource1.ExtractResourceID(),
+			Extract:      resource.ExtractResourceID(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.FeaturestoreRef,
 			Selector:     mg.Spec.ForProvider.FeaturestoreSelector,
@@ -105,7 +104,7 @@ func (mg *FeaturestoreEntitytype) ResolveReferences(ctx context.Context, c clien
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Featurestore),
-			Extract:      resource1.ExtractResourceID(),
+			Extract:      resource.ExtractResourceID(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.FeaturestoreRef,
 			Selector:     mg.Spec.InitProvider.FeaturestoreSelector,

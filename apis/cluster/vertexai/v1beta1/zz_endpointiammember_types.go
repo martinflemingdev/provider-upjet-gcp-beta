@@ -45,7 +45,7 @@ type EndpointIAMMemberInitParameters struct {
 	Condition *ConditionInitParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
 	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/vertexai/v1beta1.Endpoint
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id", true)
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("id", true)
 	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
 
 	// Reference to a Endpoint in vertexai to populate endpoint.
@@ -89,7 +89,7 @@ type EndpointIAMMemberParameters struct {
 	Condition *ConditionParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
 	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/vertexai/v1beta1.Endpoint
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id", true)
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("id", true)
 	// +kubebuilder:validation:Optional
 	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
 
