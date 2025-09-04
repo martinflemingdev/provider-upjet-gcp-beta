@@ -20,6 +20,7 @@ import (
 
 	"github.com/upbound/provider-gcp-beta/config/cluster/compute"
 	"github.com/upbound/provider-gcp-beta/config/cluster/container"
+	"github.com/upbound/provider-gcp-beta/config/cluster/dataform"
 	"github.com/upbound/provider-gcp-beta/config/cluster/networksecurity"
 	"github.com/upbound/provider-gcp-beta/hack"
 )
@@ -90,6 +91,7 @@ func GetProvider(_ context.Context, sdkProvider *schema.Provider, generationProv
 		container.Configure,
 		networksecurity.Configure,
 		compute.Configure,
+		dataform.Configure,
 	} {
 		configure(pc)
 	}

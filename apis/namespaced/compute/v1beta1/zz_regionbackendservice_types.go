@@ -1152,6 +1152,44 @@ type HTTPCookieParameters struct {
 	TTL *TTLParameters `json:"ttl,omitempty" tf:"ttl,omitempty"`
 }
 
+type HaPolicyInitParameters struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	Leader *LeaderInitParameters `json:"leader,omitempty" tf:"leader,omitempty"`
+}
+
+type HaPolicyObservation struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	Leader *LeaderObservation `json:"leader,omitempty" tf:"leader,omitempty"`
+}
+
+type HaPolicyParameters struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	// +kubebuilder:validation:Optional
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	Leader *LeaderParameters `json:"leader,omitempty" tf:"leader,omitempty"`
+}
+
 type IPPortSelectionInitParameters struct {
 
 	// A boolean flag enabling IP:PORT based dynamic forwarding.
@@ -1250,6 +1288,41 @@ type IntervalParameters struct {
 	Seconds *float64 `json:"seconds" tf:"seconds,omitempty"`
 }
 
+type LeaderInitParameters struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	NetworkEndpoint *NetworkEndpointInitParameters `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
+type LeaderObservation struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	NetworkEndpoint *NetworkEndpointObservation `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
+type LeaderParameters struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	// +kubebuilder:validation:Optional
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	NetworkEndpoint *NetworkEndpointParameters `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
 type NegativeCachingPolicyInitParameters struct {
 
 	// The HTTP status code to define a TTL against. Only HTTP status codes 300, 301, 308, 404, 405, 410, 421, 451 and 501
@@ -1283,6 +1356,28 @@ type NegativeCachingPolicyParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
+}
+
+type NetworkEndpointInitParameters struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
+}
+
+type NetworkEndpointObservation struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
+}
+
+type NetworkEndpointParameters struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	// +kubebuilder:validation:Optional
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
 }
 
 type OutlierDetectionInitParameters struct {
@@ -1605,6 +1700,17 @@ type RegionBackendServiceInitParameters struct {
 	// Structure is documented below.
 	FailoverPolicy *FailoverPolicyInitParameters `json:"failoverPolicy,omitempty" tf:"failover_policy,omitempty"`
 
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	HaPolicy *HaPolicyInitParameters `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
+
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health
 	// check can be specified.
@@ -1828,6 +1934,17 @@ type RegionBackendServiceObservation struct {
 	// The unique identifier for the resource. This identifier is defined by the server.
 	GeneratedID *float64 `json:"generatedId,omitempty" tf:"generated_id,omitempty"`
 
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	HaPolicy *HaPolicyObservation `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
+
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health
 	// check can be specified.
@@ -1988,6 +2105,18 @@ type RegionBackendServiceParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	FailoverPolicy *FailoverPolicyParameters `json:"failoverPolicy,omitempty" tf:"failover_policy,omitempty"`
+
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	HaPolicy *HaPolicyParameters `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
 
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health

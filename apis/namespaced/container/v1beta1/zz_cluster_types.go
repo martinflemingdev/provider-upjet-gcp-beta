@@ -14,6 +14,38 @@ import (
 	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
 )
 
+type AdditionalIPRangesConfigInitParameters struct {
+
+	// List of secondary ranges names within this subnetwork that can be used for pod IPs.
+	PodIPv4RangeNames []*string `json:"podIpv4RangeNames,omitempty" tf:"pod_ipv4_range_names,omitempty"`
+
+	// The name or self_link of the Google Compute Engine
+	// subnetwork in which the cluster's instances are launched.
+	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
+}
+
+type AdditionalIPRangesConfigObservation struct {
+
+	// List of secondary ranges names within this subnetwork that can be used for pod IPs.
+	PodIPv4RangeNames []*string `json:"podIpv4RangeNames,omitempty" tf:"pod_ipv4_range_names,omitempty"`
+
+	// The name or self_link of the Google Compute Engine
+	// subnetwork in which the cluster's instances are launched.
+	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
+}
+
+type AdditionalIPRangesConfigParameters struct {
+
+	// List of secondary ranges names within this subnetwork that can be used for pod IPs.
+	// +kubebuilder:validation:Optional
+	PodIPv4RangeNames []*string `json:"podIpv4RangeNames,omitempty" tf:"pod_ipv4_range_names,omitempty"`
+
+	// The name or self_link of the Google Compute Engine
+	// subnetwork in which the cluster's instances are launched.
+	// +kubebuilder:validation:Optional
+	Subnetwork *string `json:"subnetwork" tf:"subnetwork,omitempty"`
+}
+
 type AdditionalNodeNetworkConfigsInitParameters struct {
 }
 
@@ -124,6 +156,16 @@ type AddonsConfigInitParameters struct {
 	// Configuration for the KALM addon, which manages the lifecycle of k8s. It is disabled by default; Set enabled = true to enable.
 	KalmConfig *KalmConfigInitParameters `json:"kalmConfig,omitempty" tf:"kalm_config,omitempty"`
 
+	// The status of the Lustre CSI driver addon,
+	// which allows the usage of a Lustre instances as volumes.
+	// It is disabled by default for Standard clusters; set enabled = true to enable.
+	// It is disabled by default for Autopilot clusters; set enabled = true to enable.
+	// Lustre CSI Driver Config has optional subfield
+	// enable_legacy_lustre_port which allows the Lustre CSI driver to initialize LNet (the virtual networklayer for Lustre kernel module) using port 6988.
+	// This flag is required to workaround a port conflict with the gke-metadata-server on GKE nodes.
+	// See Enable Lustre CSI driver for more information.
+	LustreCsiDriverConfig *LustreCsiDriverConfigInitParameters `json:"lustreCsiDriverConfig,omitempty" tf:"lustre_csi_driver_config,omitempty"`
+
 	// Whether we should enable the network policy addon
 	// for the master.  This must be enabled in order to enable network policy for the nodes.
 	// To enable this, you must also define a network_policy block,
@@ -204,6 +246,16 @@ type AddonsConfigObservation struct {
 	// .
 	// Configuration for the KALM addon, which manages the lifecycle of k8s. It is disabled by default; Set enabled = true to enable.
 	KalmConfig *KalmConfigObservation `json:"kalmConfig,omitempty" tf:"kalm_config,omitempty"`
+
+	// The status of the Lustre CSI driver addon,
+	// which allows the usage of a Lustre instances as volumes.
+	// It is disabled by default for Standard clusters; set enabled = true to enable.
+	// It is disabled by default for Autopilot clusters; set enabled = true to enable.
+	// Lustre CSI Driver Config has optional subfield
+	// enable_legacy_lustre_port which allows the Lustre CSI driver to initialize LNet (the virtual networklayer for Lustre kernel module) using port 6988.
+	// This flag is required to workaround a port conflict with the gke-metadata-server on GKE nodes.
+	// See Enable Lustre CSI driver for more information.
+	LustreCsiDriverConfig *LustreCsiDriverConfigObservation `json:"lustreCsiDriverConfig,omitempty" tf:"lustre_csi_driver_config,omitempty"`
 
 	// Whether we should enable the network policy addon
 	// for the master.  This must be enabled in order to enable network policy for the nodes.
@@ -297,6 +349,17 @@ type AddonsConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	KalmConfig *KalmConfigParameters `json:"kalmConfig,omitempty" tf:"kalm_config,omitempty"`
 
+	// The status of the Lustre CSI driver addon,
+	// which allows the usage of a Lustre instances as volumes.
+	// It is disabled by default for Standard clusters; set enabled = true to enable.
+	// It is disabled by default for Autopilot clusters; set enabled = true to enable.
+	// Lustre CSI Driver Config has optional subfield
+	// enable_legacy_lustre_port which allows the Lustre CSI driver to initialize LNet (the virtual networklayer for Lustre kernel module) using port 6988.
+	// This flag is required to workaround a port conflict with the gke-metadata-server on GKE nodes.
+	// See Enable Lustre CSI driver for more information.
+	// +kubebuilder:validation:Optional
+	LustreCsiDriverConfig *LustreCsiDriverConfigParameters `json:"lustreCsiDriverConfig,omitempty" tf:"lustre_csi_driver_config,omitempty"`
+
 	// Whether we should enable the network policy addon
 	// for the master.  This must be enabled in order to enable network policy for the nodes.
 	// To enable this, you must also define a network_policy block,
@@ -362,6 +425,9 @@ type AdvancedMachineFeaturesInitParameters struct {
 	// Defines whether the instance should have nested virtualization enabled. Defaults to false.
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
 
+	// Defines the performance monitoring unit PMU level. Valid values are ARCHITECTURAL, STANDARD, or ENHANCED. Defaults to off.
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
+
 	// The number of threads per physical core. To disable simultaneous multithreading (SMT) set this to 1. If unset, the maximum number of threads supported per core by the underlying processor is assumed.
 	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
 }
@@ -370,6 +436,9 @@ type AdvancedMachineFeaturesObservation struct {
 
 	// Defines whether the instance should have nested virtualization enabled. Defaults to false.
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
+
+	// Defines the performance monitoring unit PMU level. Valid values are ARCHITECTURAL, STANDARD, or ENHANCED. Defaults to off.
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
 
 	// The number of threads per physical core. To disable simultaneous multithreading (SMT) set this to 1. If unset, the maximum number of threads supported per core by the underlying processor is assumed.
 	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
@@ -381,9 +450,32 @@ type AdvancedMachineFeaturesParameters struct {
 	// +kubebuilder:validation:Optional
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
 
+	// Defines the performance monitoring unit PMU level. Valid values are ARCHITECTURAL, STANDARD, or ENHANCED. Defaults to off.
+	// +kubebuilder:validation:Optional
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
+
 	// The number of threads per physical core. To disable simultaneous multithreading (SMT) set this to 1. If unset, the maximum number of threads supported per core by the underlying processor is assumed.
 	// +kubebuilder:validation:Optional
 	ThreadsPerCore *float64 `json:"threadsPerCore" tf:"threads_per_core,omitempty"`
+}
+
+type AnonymousAuthenticationConfigInitParameters struct {
+
+	// Sets or removes authentication restrictions. Available options include LIMITED and ENABLED.
+	Mode *string `json:"mode,omitempty" tf:"mode,omitempty"`
+}
+
+type AnonymousAuthenticationConfigObservation struct {
+
+	// Sets or removes authentication restrictions. Available options include LIMITED and ENABLED.
+	Mode *string `json:"mode,omitempty" tf:"mode,omitempty"`
+}
+
+type AnonymousAuthenticationConfigParameters struct {
+
+	// Sets or removes authentication restrictions. Available options include LIMITED and ENABLED.
+	// +kubebuilder:validation:Optional
+	Mode *string `json:"mode" tf:"mode,omitempty"`
 }
 
 type AuthenticatorGroupsConfigInitParameters struct {
@@ -433,7 +525,7 @@ type AutoProvisioningDefaultsInitParameters struct {
 	DiskSize *float64 `json:"diskSize,omitempty" tf:"disk_size,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
 	// The image type to use for this node. Note that changing the image type
@@ -475,7 +567,7 @@ type AutoProvisioningDefaultsObservation struct {
 	DiskSize *float64 `json:"diskSize,omitempty" tf:"disk_size,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
 	// The image type to use for this node. Note that changing the image type
@@ -519,7 +611,7 @@ type AutoProvisioningDefaultsParameters struct {
 	DiskSize *float64 `json:"diskSize,omitempty" tf:"disk_size,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	// +kubebuilder:validation:Optional
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
@@ -674,6 +766,61 @@ type BlueGreenSettingsStandardRolloutPolicyObservation struct {
 }
 
 type BlueGreenSettingsStandardRolloutPolicyParameters struct {
+}
+
+type BootDiskInitParameters struct {
+
+	// Type of the disk attached to each node
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// Configure disk IOPs. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	// Configure disk throughput. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	// Size of the disk attached to each node, specified
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated from node_config.disk_size_gb, and must match if specified in both places. Prefer using this field.
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
+type BootDiskObservation struct {
+
+	// Type of the disk attached to each node
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// Configure disk IOPs. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	// Configure disk throughput. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	// Size of the disk attached to each node, specified
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated from node_config.disk_size_gb, and must match if specified in both places. Prefer using this field.
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
+type BootDiskParameters struct {
+
+	// Type of the disk attached to each node
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
+	// +kubebuilder:validation:Optional
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// Configure disk IOPs. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	// +kubebuilder:validation:Optional
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	// Configure disk throughput. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	// +kubebuilder:validation:Optional
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	// Size of the disk attached to each node, specified
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated from node_config.disk_size_gb, and must match if specified in both places. Prefer using this field.
+	// +kubebuilder:validation:Optional
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
 }
 
 type CertificateAuthorityDomainConfigGCPSecretManagerCertificateConfigInitParameters struct {
@@ -891,6 +1038,9 @@ type ClusterInitParameters struct {
 	// set to true).
 	AllowNetAdmin *bool `json:"allowNetAdmin,omitempty" tf:"allow_net_admin,omitempty"`
 
+	// Configuration for anonymous authentication restrictions. Structure is documented below.
+	AnonymousAuthenticationConfig *AnonymousAuthenticationConfigInitParameters `json:"anonymousAuthenticationConfig,omitempty" tf:"anonymous_authentication_config,omitempty"`
+
 	// Configuration for the
 	// Google Groups for GKE feature.
 	// Structure is documented below.
@@ -1007,6 +1157,10 @@ type ClusterInitParameters struct {
 
 	// Configuration for GKE Gateway API controller. Structure is documented below.
 	GatewayAPIConfig *GatewayAPIConfigInitParameters `json:"gatewayApiConfig,omitempty" tf:"gateway_api_config,omitempty"`
+
+	// Configuration options for the auto-upgrade patch type feature, which provide more control over the speed of automatic upgrades of your GKE clusters.
+	// Structure is documented below.
+	GkeAutoUpgradeConfig *GkeAutoUpgradeConfigInitParameters `json:"gkeAutoUpgradeConfig,omitempty" tf:"gke_auto_upgrade_config,omitempty"`
 
 	// Configuration of cluster IP allocation for
 	// VPC-native clusters. If this block is unset during creation, it will be set by the GKE backend.
@@ -1148,6 +1302,9 @@ type ClusterInitParameters struct {
 	// Enable/Disable Protect API features for the cluster. Structure is documented below.
 	ProtectConfig *ProtectConfigInitParameters `json:"protectConfig,omitempty" tf:"protect_config,omitempty"`
 
+	// RBACBindingConfig allows user to restrict ClusterRoleBindings an RoleBindings that can be created. Structure is documented below.
+	RbacBindingConfig *RbacBindingConfigInitParameters `json:"rbacBindingConfig,omitempty" tf:"rbac_binding_config,omitempty"`
+
 	// Configuration options for the Release channel
 	// feature, which provide more control over automatic upgrades of your GKE clusters.
 	// When updating this field, GKE imposes specific version requirements. See
@@ -1215,6 +1372,9 @@ type ClusterObservation struct {
 	// false. This field should only be enabled for Autopilot clusters (enable_autopilot
 	// set to true).
 	AllowNetAdmin *bool `json:"allowNetAdmin,omitempty" tf:"allow_net_admin,omitempty"`
+
+	// Configuration for anonymous authentication restrictions. Structure is documented below.
+	AnonymousAuthenticationConfig *AnonymousAuthenticationConfigObservation `json:"anonymousAuthenticationConfig,omitempty" tf:"anonymous_authentication_config,omitempty"`
 
 	// Configuration for the
 	// Google Groups for GKE feature.
@@ -1338,6 +1498,10 @@ type ClusterObservation struct {
 
 	// Configuration for GKE Gateway API controller. Structure is documented below.
 	GatewayAPIConfig *GatewayAPIConfigObservation `json:"gatewayApiConfig,omitempty" tf:"gateway_api_config,omitempty"`
+
+	// Configuration options for the auto-upgrade patch type feature, which provide more control over the speed of automatic upgrades of your GKE clusters.
+	// Structure is documented below.
+	GkeAutoUpgradeConfig *GkeAutoUpgradeConfigObservation `json:"gkeAutoUpgradeConfig,omitempty" tf:"gke_auto_upgrade_config,omitempty"`
 
 	// an identifier for the resource with format projects/{{project}}/locations/{{zone}}/clusters/{{name}}
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -1508,6 +1672,9 @@ type ClusterObservation struct {
 	// Enable/Disable Protect API features for the cluster. Structure is documented below.
 	ProtectConfig *ProtectConfigObservation `json:"protectConfig,omitempty" tf:"protect_config,omitempty"`
 
+	// RBACBindingConfig allows user to restrict ClusterRoleBindings an RoleBindings that can be created. Structure is documented below.
+	RbacBindingConfig *RbacBindingConfigObservation `json:"rbacBindingConfig,omitempty" tf:"rbac_binding_config,omitempty"`
+
 	// Configuration options for the Release channel
 	// feature, which provide more control over automatic upgrades of your GKE clusters.
 	// When updating this field, GKE imposes specific version requirements. See
@@ -1595,6 +1762,10 @@ type ClusterParameters struct {
 	// set to true).
 	// +kubebuilder:validation:Optional
 	AllowNetAdmin *bool `json:"allowNetAdmin,omitempty" tf:"allow_net_admin,omitempty"`
+
+	// Configuration for anonymous authentication restrictions. Structure is documented below.
+	// +kubebuilder:validation:Optional
+	AnonymousAuthenticationConfig *AnonymousAuthenticationConfigParameters `json:"anonymousAuthenticationConfig,omitempty" tf:"anonymous_authentication_config,omitempty"`
 
 	// Configuration for the
 	// Google Groups for GKE feature.
@@ -1742,6 +1913,11 @@ type ClusterParameters struct {
 	// Configuration for GKE Gateway API controller. Structure is documented below.
 	// +kubebuilder:validation:Optional
 	GatewayAPIConfig *GatewayAPIConfigParameters `json:"gatewayApiConfig,omitempty" tf:"gateway_api_config,omitempty"`
+
+	// Configuration options for the auto-upgrade patch type feature, which provide more control over the speed of automatic upgrades of your GKE clusters.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	GkeAutoUpgradeConfig *GkeAutoUpgradeConfigParameters `json:"gkeAutoUpgradeConfig,omitempty" tf:"gke_auto_upgrade_config,omitempty"`
 
 	// Configuration of cluster IP allocation for
 	// VPC-native clusters. If this block is unset during creation, it will be set by the GKE backend.
@@ -1921,6 +2097,10 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	ProtectConfig *ProtectConfigParameters `json:"protectConfig,omitempty" tf:"protect_config,omitempty"`
 
+	// RBACBindingConfig allows user to restrict ClusterRoleBindings an RoleBindings that can be created. Structure is documented below.
+	// +kubebuilder:validation:Optional
+	RbacBindingConfig *RbacBindingConfigParameters `json:"rbacBindingConfig,omitempty" tf:"rbac_binding_config,omitempty"`
+
 	// Configuration options for the Release channel
 	// feature, which provide more control over automatic upgrades of your GKE clusters.
 	// When updating this field, GKE imposes specific version requirements. See
@@ -2015,6 +2195,10 @@ type ClusterTelemetryParameters struct {
 
 type ConfidentialNodesInitParameters struct {
 
+	// Defines the type of technology used
+	// by the confidential node.
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
+
 	// Enable Confidential GKE Nodes for this node pool, to
 	// enforce encryption of data in-use.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
@@ -2022,12 +2206,21 @@ type ConfidentialNodesInitParameters struct {
 
 type ConfidentialNodesObservation struct {
 
+	// Defines the type of technology used
+	// by the confidential node.
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
+
 	// Enable Confidential GKE Nodes for this node pool, to
 	// enforce encryption of data in-use.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 }
 
 type ConfidentialNodesParameters struct {
+
+	// Defines the type of technology used
+	// by the confidential node.
+	// +kubebuilder:validation:Optional
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Enable Confidential GKE Nodes for this node pool, to
 	// enforce encryption of data in-use.
@@ -2634,6 +2827,28 @@ type GcsFuseCsiDriverConfigParameters struct {
 	Enabled *bool `json:"enabled" tf:"enabled,omitempty"`
 }
 
+type GkeAutoUpgradeConfigInitParameters struct {
+
+	// The selected patch mode.
+	// Accepted values are:
+	PatchMode *string `json:"patchMode,omitempty" tf:"patch_mode,omitempty"`
+}
+
+type GkeAutoUpgradeConfigObservation struct {
+
+	// The selected patch mode.
+	// Accepted values are:
+	PatchMode *string `json:"patchMode,omitempty" tf:"patch_mode,omitempty"`
+}
+
+type GkeAutoUpgradeConfigParameters struct {
+
+	// The selected patch mode.
+	// Accepted values are:
+	// +kubebuilder:validation:Optional
+	PatchMode *string `json:"patchMode" tf:"patch_mode,omitempty"`
+}
+
 type GkeBackupAgentConfigInitParameters struct {
 
 	// Enables vertical pod autoscaling
@@ -2903,6 +3118,10 @@ type HugepagesConfigParameters struct {
 
 type IPAllocationPolicyInitParameters struct {
 
+	// The configuration for individual additional subnetworks attached to the cluster.
+	// Structure is documented below.
+	AdditionalIPRangesConfig []AdditionalIPRangesConfigInitParameters `json:"additionalIpRangesConfig,omitempty" tf:"additional_ip_ranges_config,omitempty"`
+
 	// The configuration for additional pod secondary ranges at
 	// the cluster level. Used for Autopilot clusters and Standard clusters with which control of the
 	// secondary Pod IP address assignment to node pools isn't needed. Structure is documented below.
@@ -2943,6 +3162,10 @@ type IPAllocationPolicyInitParameters struct {
 
 type IPAllocationPolicyObservation struct {
 
+	// The configuration for individual additional subnetworks attached to the cluster.
+	// Structure is documented below.
+	AdditionalIPRangesConfig []AdditionalIPRangesConfigObservation `json:"additionalIpRangesConfig,omitempty" tf:"additional_ip_ranges_config,omitempty"`
+
 	// The configuration for additional pod secondary ranges at
 	// the cluster level. Used for Autopilot clusters and Standard clusters with which control of the
 	// secondary Pod IP address assignment to node pools isn't needed. Structure is documented below.
@@ -2982,6 +3205,11 @@ type IPAllocationPolicyObservation struct {
 }
 
 type IPAllocationPolicyParameters struct {
+
+	// The configuration for individual additional subnetworks attached to the cluster.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	AdditionalIPRangesConfig []AdditionalIPRangesConfigParameters `json:"additionalIpRangesConfig,omitempty" tf:"additional_ip_ranges_config,omitempty"`
 
 	// The configuration for additional pod secondary ranges at
 	// the cluster level. Used for Autopilot clusters and Standard clusters with which control of the
@@ -3166,6 +3394,9 @@ type KubeletConfigInitParameters struct {
 
 	// Controls the maximum number of processes allowed to run in a pod. The value must be greater than or equal to 1024 and less than 4194304.
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	// Defines whether to enable single process OOM killer. If true, the processes in the container will be OOM killed individually instead of as a group.
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type KubeletConfigObservation struct {
@@ -3217,6 +3448,9 @@ type KubeletConfigObservation struct {
 
 	// Controls the maximum number of processes allowed to run in a pod. The value must be greater than or equal to 1024 and less than 4194304.
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	// Defines whether to enable single process OOM killer. If true, the processes in the container will be OOM killed individually instead of as a group.
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type KubeletConfigParameters struct {
@@ -3280,6 +3514,10 @@ type KubeletConfigParameters struct {
 	// Controls the maximum number of processes allowed to run in a pod. The value must be greater than or equal to 1024 and less than 4194304.
 	// +kubebuilder:validation:Optional
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	// Defines whether to enable single process OOM killer. If true, the processes in the container will be OOM killed individually instead of as a group.
+	// +kubebuilder:validation:Optional
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type LinuxNodeConfigHugepagesConfigInitParameters struct {
@@ -3393,6 +3631,30 @@ type LoggingConfigParameters struct {
 	// SYSTEM_COMPONENTS, APISERVER, CONTROLLER_MANAGER, SCHEDULER, and WORKLOADS.
 	// +kubebuilder:validation:Optional
 	EnableComponents []*string `json:"enableComponents" tf:"enable_components,omitempty"`
+}
+
+type LustreCsiDriverConfigInitParameters struct {
+	EnableLegacyLustrePort *bool `json:"enableLegacyLustrePort,omitempty" tf:"enable_legacy_lustre_port,omitempty"`
+
+	// Enables vertical pod autoscaling
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type LustreCsiDriverConfigObservation struct {
+	EnableLegacyLustrePort *bool `json:"enableLegacyLustrePort,omitempty" tf:"enable_legacy_lustre_port,omitempty"`
+
+	// Enables vertical pod autoscaling
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type LustreCsiDriverConfigParameters struct {
+
+	// +kubebuilder:validation:Optional
+	EnableLegacyLustrePort *bool `json:"enableLegacyLustrePort,omitempty" tf:"enable_legacy_lustre_port,omitempty"`
+
+	// Enables vertical pod autoscaling
+	// +kubebuilder:validation:Optional
+	Enabled *bool `json:"enabled" tf:"enabled,omitempty"`
 }
 
 type MaintenanceExclusionInitParameters struct {
@@ -3727,6 +3989,10 @@ type NetworkConfigObservation struct {
 	PodIPv4CidrBlock *string `json:"podIpv4CidrBlock,omitempty" tf:"pod_ipv4_cidr_block,omitempty"`
 
 	PodRange *string `json:"podRange,omitempty" tf:"pod_range,omitempty"`
+
+	// The name or self_link of the Google Compute Engine
+	// subnetwork in which the cluster's instances are launched.
+	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
 type NetworkConfigParameters struct {
@@ -3884,6 +4150,9 @@ type NodeConfigAdvancedMachineFeaturesObservation struct {
 	// Defines whether the instance should have nested virtualization enabled. Defaults to false.
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
 
+	// Defines the performance monitoring unit PMU level. Valid values are ARCHITECTURAL, STANDARD, or ENHANCED. Defaults to off.
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
+
 	// The number of threads per physical core. To disable simultaneous multithreading (SMT) set this to 1. If unset, the maximum number of threads supported per core by the underlying processor is assumed.
 	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
 }
@@ -3891,7 +4160,34 @@ type NodeConfigAdvancedMachineFeaturesObservation struct {
 type NodeConfigAdvancedMachineFeaturesParameters struct {
 }
 
+type NodeConfigBootDiskInitParameters struct {
+}
+
+type NodeConfigBootDiskObservation struct {
+
+	// Type of the disk attached to each node
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// Configure disk IOPs. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	// Configure disk throughput. This is only valid if the disk_type is 'hyperdisk-balanced'. See performance limit documention for more information about valid values.
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	// Size of the disk attached to each node, specified
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated from node_config.disk_size_gb, and must match if specified in both places. Prefer using this field.
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
+type NodeConfigBootDiskParameters struct {
+}
+
 type NodeConfigConfidentialNodesInitParameters struct {
+
+	// Defines the type of technology used
+	// by the confidential node.
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Enables vertical pod autoscaling
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
@@ -3899,11 +4195,20 @@ type NodeConfigConfidentialNodesInitParameters struct {
 
 type NodeConfigConfidentialNodesObservation struct {
 
+	// Defines the type of technology used
+	// by the confidential node.
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
+
 	// Enables vertical pod autoscaling
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 }
 
 type NodeConfigConfidentialNodesParameters struct {
+
+	// Defines the type of technology used
+	// by the confidential node.
+	// +kubebuilder:validation:Optional
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Enables vertical pod autoscaling
 	// +kubebuilder:validation:Optional
@@ -4161,6 +4466,9 @@ type NodeConfigInitParameters struct {
 	// advanced machine features. Structure is documented below.
 	AdvancedMachineFeatures *AdvancedMachineFeaturesInitParameters `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
 
+	// Configuration of the node pool boot disk. Structure is documented below
+	BootDisk *BootDiskInitParameters `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
+
 	// The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool. This should be of the form projects/[KEY_PROJECT_ID]/locations/[LOCATION]/keyRings/[RING_NAME]/cryptoKeys/[KEY_NAME]. For more information about protecting resources with Cloud KMS Keys please see: https://cloud.google.com/compute/docs/disks/customer-managed-encryption
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
 
@@ -4171,11 +4479,12 @@ type NodeConfigInitParameters struct {
 	ContainerdConfig *ContainerdConfigInitParameters `json:"containerdConfig,omitempty" tf:"containerd_config,omitempty"`
 
 	// Size of the disk attached to each node, specified
-	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB.
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated to boot_disk.size_gb, and must match if specified in both places.
+	// Prefer configuring boot_disk.
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
 	// Enabling Confidential Storage will create boot disk with confidential mode. It is disabled by default.
@@ -4404,6 +4713,9 @@ type NodeConfigKubeletConfigObservation struct {
 
 	// Controls the maximum number of processes allowed to run in a pod. The value must be greater than or equal to 1024 and less than 4194304.
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	// Defines whether to enable single process OOM killer. If true, the processes in the container will be OOM killed individually instead of as a group.
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type NodeConfigKubeletConfigParameters struct {
@@ -4451,6 +4763,9 @@ type NodeConfigObservation struct {
 	// advanced machine features. Structure is documented below.
 	AdvancedMachineFeatures *AdvancedMachineFeaturesObservation `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
 
+	// Configuration of the node pool boot disk. Structure is documented below
+	BootDisk *BootDiskObservation `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
+
 	// The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool. This should be of the form projects/[KEY_PROJECT_ID]/locations/[LOCATION]/keyRings/[RING_NAME]/cryptoKeys/[KEY_NAME]. For more information about protecting resources with Cloud KMS Keys please see: https://cloud.google.com/compute/docs/disks/customer-managed-encryption
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
 
@@ -4461,11 +4776,12 @@ type NodeConfigObservation struct {
 	ContainerdConfig *ContainerdConfigObservation `json:"containerdConfig,omitempty" tf:"containerd_config,omitempty"`
 
 	// Size of the disk attached to each node, specified
-	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB.
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated to boot_disk.size_gb, and must match if specified in both places.
+	// Prefer configuring boot_disk.
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
 	// List of kubernetes taints applied to each node. Structure is documented above.
@@ -4642,6 +4958,10 @@ type NodeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	AdvancedMachineFeatures *AdvancedMachineFeaturesParameters `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
 
+	// Configuration of the node pool boot disk. Structure is documented below
+	// +kubebuilder:validation:Optional
+	BootDisk *BootDiskParameters `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
+
 	// The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool. This should be of the form projects/[KEY_PROJECT_ID]/locations/[LOCATION]/keyRings/[RING_NAME]/cryptoKeys/[KEY_NAME]. For more information about protecting resources with Cloud KMS Keys please see: https://cloud.google.com/compute/docs/disks/customer-managed-encryption
 	// +kubebuilder:validation:Optional
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
@@ -4655,12 +4975,13 @@ type NodeConfigParameters struct {
 	ContainerdConfig *ContainerdConfigParameters `json:"containerdConfig,omitempty" tf:"containerd_config,omitempty"`
 
 	// Size of the disk attached to each node, specified
-	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB.
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated to boot_disk.size_gb, and must match if specified in both places.
+	// Prefer configuring boot_disk.
 	// +kubebuilder:validation:Optional
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	// +kubebuilder:validation:Optional
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
@@ -5143,6 +5464,10 @@ type NodePoolNodeConfigConfidentialNodesInitParameters struct {
 
 type NodePoolNodeConfigConfidentialNodesObservation struct {
 
+	// Defines the type of technology used
+	// by the confidential node.
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
+
 	// Enables vertical pod autoscaling
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 }
@@ -5159,6 +5484,9 @@ type NodePoolNodeConfigObservation struct {
 	// advanced machine features. Structure is documented below.
 	AdvancedMachineFeatures *NodeConfigAdvancedMachineFeaturesObservation `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
 
+	// Configuration of the node pool boot disk. Structure is documented below
+	BootDisk *NodeConfigBootDiskObservation `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
+
 	// The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool. This should be of the form projects/[KEY_PROJECT_ID]/locations/[LOCATION]/keyRings/[RING_NAME]/cryptoKeys/[KEY_NAME]. For more information about protecting resources with Cloud KMS Keys please see: https://cloud.google.com/compute/docs/disks/customer-managed-encryption
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
 
@@ -5169,11 +5497,12 @@ type NodePoolNodeConfigObservation struct {
 	ContainerdConfig *NodeConfigContainerdConfigObservation `json:"containerdConfig,omitempty" tf:"containerd_config,omitempty"`
 
 	// Size of the disk attached to each node, specified
-	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB.
+	// in GB. The smallest allowed disk size is 10GB. Defaults to 100GB. This is being migrated to boot_disk.size_gb, and must match if specified in both places.
+	// Prefer configuring boot_disk.
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
 	// Type of the disk attached to each node
-	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced'
+	// (e.g. 'pd-standard', 'pd-balanced' or 'pd-ssd'). If unspecified, the default disk type is 'pd-balanced' This is being migrated to boot_disk.disk_type, and must match if specified in both places. Prefer configuring boot_disk.
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
 	// List of kubernetes taints applied to each node. Structure is documented above.
@@ -5876,6 +6205,35 @@ type RayOperatorConfigParameters struct {
 	RayClusterMonitoringConfig *RayClusterMonitoringConfigParameters `json:"rayClusterMonitoringConfig,omitempty" tf:"ray_cluster_monitoring_config,omitempty"`
 }
 
+type RbacBindingConfigInitParameters struct {
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:authenticated.
+	EnableInsecureBindingSystemAuthenticated *bool `json:"enableInsecureBindingSystemAuthenticated,omitempty" tf:"enable_insecure_binding_system_authenticated,omitempty"`
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:anonymous or system:unauthenticated.
+	EnableInsecureBindingSystemUnauthenticated *bool `json:"enableInsecureBindingSystemUnauthenticated,omitempty" tf:"enable_insecure_binding_system_unauthenticated,omitempty"`
+}
+
+type RbacBindingConfigObservation struct {
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:authenticated.
+	EnableInsecureBindingSystemAuthenticated *bool `json:"enableInsecureBindingSystemAuthenticated,omitempty" tf:"enable_insecure_binding_system_authenticated,omitempty"`
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:anonymous or system:unauthenticated.
+	EnableInsecureBindingSystemUnauthenticated *bool `json:"enableInsecureBindingSystemUnauthenticated,omitempty" tf:"enable_insecure_binding_system_unauthenticated,omitempty"`
+}
+
+type RbacBindingConfigParameters struct {
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:authenticated.
+	// +kubebuilder:validation:Optional
+	EnableInsecureBindingSystemAuthenticated *bool `json:"enableInsecureBindingSystemAuthenticated,omitempty" tf:"enable_insecure_binding_system_authenticated,omitempty"`
+
+	// Setting this to true will allow any ClusterRoleBinding and RoleBinding with subjects system:anonymous or system:unauthenticated.
+	// +kubebuilder:validation:Optional
+	EnableInsecureBindingSystemUnauthenticated *bool `json:"enableInsecureBindingSystemUnauthenticated,omitempty" tf:"enable_insecure_binding_system_unauthenticated,omitempty"`
+}
+
 type RecurringWindowInitParameters struct {
 	EndTime *string `json:"endTime,omitempty" tf:"end_time,omitempty"`
 
@@ -6070,6 +6428,35 @@ type ResourceUsageExportConfigParameters struct {
 	EnableResourceConsumptionMetering *bool `json:"enableResourceConsumptionMetering,omitempty" tf:"enable_resource_consumption_metering,omitempty"`
 }
 
+type RotationConfigInitParameters struct {
+
+	// Enable the roation in Secret Manager add-on for this cluster.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// The interval between two consecutive rotations. Default rotation interval is 2 minutes.
+	RotationInterval *string `json:"rotationInterval,omitempty" tf:"rotation_interval,omitempty"`
+}
+
+type RotationConfigObservation struct {
+
+	// Enable the roation in Secret Manager add-on for this cluster.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// The interval between two consecutive rotations. Default rotation interval is 2 minutes.
+	RotationInterval *string `json:"rotationInterval,omitempty" tf:"rotation_interval,omitempty"`
+}
+
+type RotationConfigParameters struct {
+
+	// Enable the roation in Secret Manager add-on for this cluster.
+	// +kubebuilder:validation:Optional
+	Enabled *bool `json:"enabled" tf:"enabled,omitempty"`
+
+	// The interval between two consecutive rotations. Default rotation interval is 2 minutes.
+	// +kubebuilder:validation:Optional
+	RotationInterval *string `json:"rotationInterval,omitempty" tf:"rotation_interval,omitempty"`
+}
+
 type SandboxConfigInitParameters struct {
 
 	// Which sandbox to use for pods in the node pool.
@@ -6128,12 +6515,18 @@ type SecretManagerConfigInitParameters struct {
 
 	// Enable the Secret Manager add-on for this cluster.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// config for secret manager auto rotation. Structure is docuemented below
+	RotationConfig *RotationConfigInitParameters `json:"rotationConfig,omitempty" tf:"rotation_config,omitempty"`
 }
 
 type SecretManagerConfigObservation struct {
 
 	// Enable the Secret Manager add-on for this cluster.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// config for secret manager auto rotation. Structure is docuemented below
+	RotationConfig *RotationConfigObservation `json:"rotationConfig,omitempty" tf:"rotation_config,omitempty"`
 }
 
 type SecretManagerConfigParameters struct {
@@ -6141,6 +6534,10 @@ type SecretManagerConfigParameters struct {
 	// Enable the Secret Manager add-on for this cluster.
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled" tf:"enabled,omitempty"`
+
+	// config for secret manager auto rotation. Structure is docuemented below
+	// +kubebuilder:validation:Optional
+	RotationConfig *RotationConfigParameters `json:"rotationConfig,omitempty" tf:"rotation_config,omitempty"`
 }
 
 type SecurityPostureConfigInitParameters struct {

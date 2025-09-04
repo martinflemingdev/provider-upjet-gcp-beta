@@ -14,6 +14,7 @@ import (
 	v1beta1compute "github.com/upbound/provider-gcp-beta/apis/cluster/compute/v1beta1"
 	v1beta1container "github.com/upbound/provider-gcp-beta/apis/cluster/container/v1beta1"
 	v1beta2 "github.com/upbound/provider-gcp-beta/apis/cluster/container/v1beta2"
+	v1beta1dataform "github.com/upbound/provider-gcp-beta/apis/cluster/dataform/v1beta1"
 	v1beta1networksecurity "github.com/upbound/provider-gcp-beta/apis/cluster/networksecurity/v1beta1"
 	v1alpha1 "github.com/upbound/provider-gcp-beta/apis/cluster/v1alpha1"
 	v1beta1cluster "github.com/upbound/provider-gcp-beta/apis/cluster/v1beta1"
@@ -26,6 +27,7 @@ func init() {
 		v1beta1compute.SchemeBuilder.AddToScheme,
 		v1beta1container.SchemeBuilder.AddToScheme,
 		v1beta2.SchemeBuilder.AddToScheme,
+		v1beta1dataform.SchemeBuilder.AddToScheme,
 		v1beta1networksecurity.SchemeBuilder.AddToScheme,
 		v1alpha1.SchemeBuilder.AddToScheme,
 		v1beta1cluster.SchemeBuilder.AddToScheme,

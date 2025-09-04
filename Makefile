@@ -182,6 +182,8 @@ pull-docs:
 	@git -C "$(WORK_DIR)/$(notdir $(TERRAFORM_PROVIDER_REPO))" sparse-checkout set "$(TERRAFORM_DOCS_PATH)"
 	@# workaround for being unable override raw registry data. To be tracked in upjet.
 	# @rm .work/terraform-provider-google-beta/website/docs/r/model_armor_template.html.markdown
+	@# remove this because doesn't fit the scraper
+	@rm -fR .work/terraform-provider-google-beta//website/docs/r/model_armor_template.html.markdown
 
 generate.init: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
 

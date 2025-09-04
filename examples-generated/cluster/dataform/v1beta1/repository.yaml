@@ -1,0 +1,25 @@
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: Repository
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repository
+  labels:
+    testing.upbound.io/example-name: dataform_repository
+  name: dataform-repository
+spec:
+  forProvider:
+    deletionPolicy: FORCE
+    displayName: dataform_repository
+    gitRemoteSettings:
+    - authenticationTokenSecretVersion: ${google_secret_manager_secret_version.secret_version.id}
+      defaultBranch: main
+      url: https://github.com/OWNER/REPOSITORY.git
+    kmsKeyName: ${google_kms_crypto_key.example_key.id}
+    labels:
+      label_foo1: label-bar1
+    npmrcEnvironmentVariablesSecretVersion: ${google_secret_manager_secret_version.secret_version.id}
+    provider: ${google-beta}
+    workspaceCompilationOverrides:
+    - defaultDatabase: database
+      schemaSuffix: _suffix
+      tablePrefix: prefix_

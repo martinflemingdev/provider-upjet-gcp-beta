@@ -33,7 +33,7 @@ type NetworkConfigAdditionalNodeNetworkConfigsInitParameters struct {
 	// Name of the VPC where the additional interface belongs.
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
@@ -42,7 +42,7 @@ type NetworkConfigAdditionalNodeNetworkConfigsObservation struct {
 	// Name of the VPC where the additional interface belongs.
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
@@ -52,7 +52,7 @@ type NetworkConfigAdditionalNodeNetworkConfigsParameters struct {
 	// +kubebuilder:validation:Optional
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	// +kubebuilder:validation:Optional
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
@@ -69,7 +69,7 @@ type NetworkConfigAdditionalPodNetworkConfigsInitParameters struct {
 	// The name of the secondary range on the subnet which provides IP address for this pod range.
 	SecondaryPodRange *string `json:"secondaryPodRange,omitempty" tf:"secondary_pod_range,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
@@ -85,7 +85,7 @@ type NetworkConfigAdditionalPodNetworkConfigsObservation struct {
 	// The name of the secondary range on the subnet which provides IP address for this pod range.
 	SecondaryPodRange *string `json:"secondaryPodRange,omitempty" tf:"secondary_pod_range,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
@@ -103,7 +103,7 @@ type NetworkConfigAdditionalPodNetworkConfigsParameters struct {
 	// +kubebuilder:validation:Optional
 	SecondaryPodRange *string `json:"secondaryPodRange,omitempty" tf:"secondary_pod_range,omitempty"`
 
-	// Name of the subnetwork where the additional pod network belongs.
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
 	// +kubebuilder:validation:Optional
 	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
@@ -506,6 +506,9 @@ type NodePoolNetworkConfigObservation struct {
 
 	// The ID of the secondary range for pod IPs. If create_pod_range is true, this ID is used for the new range. If create_pod_range is false, uses an existing secondary range with this ID.
 	PodRange *string `json:"podRange,omitempty" tf:"pod_range,omitempty"`
+
+	// The subnetwork path for the node pool. Format: projects/{project}/regions/{region}/subnetworks/{subnetwork}. If the cluster is associated with multiple subnetworks, the subnetwork for the node pool is picked based on the IP utilization during node pool creation and is immutable
+	Subnetwork *string `json:"subnetwork,omitempty" tf:"subnetwork,omitempty"`
 }
 
 type NodePoolNetworkConfigParameters struct {
@@ -567,11 +570,15 @@ type NodePoolNetworkConfigPodCidrOverprovisionConfigParameters struct {
 type NodePoolNodeConfigAdvancedMachineFeaturesInitParameters struct {
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
 
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
+
 	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
 }
 
 type NodePoolNodeConfigAdvancedMachineFeaturesObservation struct {
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
+
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
 
 	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
 }
@@ -582,22 +589,65 @@ type NodePoolNodeConfigAdvancedMachineFeaturesParameters struct {
 	EnableNestedVirtualization *bool `json:"enableNestedVirtualization,omitempty" tf:"enable_nested_virtualization,omitempty"`
 
 	// +kubebuilder:validation:Optional
+	PerformanceMonitoringUnit *string `json:"performanceMonitoringUnit,omitempty" tf:"performance_monitoring_unit,omitempty"`
+
+	// +kubebuilder:validation:Optional
 	ThreadsPerCore *float64 `json:"threadsPerCore" tf:"threads_per_core,omitempty"`
 }
 
+type NodePoolNodeConfigBootDiskInitParameters struct {
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
+type NodePoolNodeConfigBootDiskObservation struct {
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
+type NodePoolNodeConfigBootDiskParameters struct {
+
+	// +kubebuilder:validation:Optional
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	ProvisionedIops *float64 `json:"provisionedIops,omitempty" tf:"provisioned_iops,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	ProvisionedThroughput *float64 `json:"provisionedThroughput,omitempty" tf:"provisioned_throughput,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	SizeGb *float64 `json:"sizeGb,omitempty" tf:"size_gb,omitempty"`
+}
+
 type NodePoolNodeConfigConfidentialNodesInitParameters_2 struct {
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Makes nodes obtainable through the ProvisioningRequest API exclusively.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 }
 
 type NodePoolNodeConfigConfidentialNodesObservation_2 struct {
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Makes nodes obtainable through the ProvisioningRequest API exclusively.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 }
 
 type NodePoolNodeConfigConfidentialNodesParameters_2 struct {
+
+	// +kubebuilder:validation:Optional
+	ConfidentialInstanceType *string `json:"confidentialInstanceType,omitempty" tf:"confidential_instance_type,omitempty"`
 
 	// Makes nodes obtainable through the ProvisioningRequest API exclusively.
 	// +kubebuilder:validation:Optional
@@ -793,6 +843,8 @@ type NodePoolNodeConfigHostMaintenancePolicyParameters struct {
 type NodePoolNodeConfigInitParameters_2 struct {
 	AdvancedMachineFeatures *NodePoolNodeConfigAdvancedMachineFeaturesInitParameters `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
 
+	BootDisk *NodePoolNodeConfigBootDiskInitParameters `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
+
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
 
 	ConfidentialNodes *NodePoolNodeConfigConfidentialNodesInitParameters_2 `json:"confidentialNodes,omitempty" tf:"confidential_nodes,omitempty"`
@@ -858,8 +910,6 @@ type NodePoolNodeConfigInitParameters_2 struct {
 
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// The configuration of the desired reservation which instances could take capacity from.
-	// Structure is documented below.
 	ReservationAffinity *NodePoolNodeConfigReservationAffinityInitParameters `json:"reservationAffinity,omitempty" tf:"reservation_affinity,omitempty"`
 
 	// +mapType=granular
@@ -927,6 +977,8 @@ type NodePoolNodeConfigKubeletConfigInitParameters struct {
 	InsecureKubeletReadonlyPortEnabled *string `json:"insecureKubeletReadonlyPortEnabled,omitempty" tf:"insecure_kubelet_readonly_port_enabled,omitempty"`
 
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type NodePoolNodeConfigKubeletConfigObservation struct {
@@ -953,6 +1005,8 @@ type NodePoolNodeConfigKubeletConfigObservation struct {
 	InsecureKubeletReadonlyPortEnabled *string `json:"insecureKubeletReadonlyPortEnabled,omitempty" tf:"insecure_kubelet_readonly_port_enabled,omitempty"`
 
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type NodePoolNodeConfigKubeletConfigParameters struct {
@@ -992,6 +1046,9 @@ type NodePoolNodeConfigKubeletConfigParameters struct {
 
 	// +kubebuilder:validation:Optional
 	PodPidsLimit *float64 `json:"podPidsLimit,omitempty" tf:"pod_pids_limit,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	SingleProcessOomKill *bool `json:"singleProcessOomKill,omitempty" tf:"single_process_oom_kill,omitempty"`
 }
 
 type NodePoolNodeConfigLinuxNodeConfigInitParameters struct {
@@ -1041,6 +1098,8 @@ type NodePoolNodeConfigLocalNvmeSsdBlockConfigParameters struct {
 
 type NodePoolNodeConfigObservation_2 struct {
 	AdvancedMachineFeatures *NodePoolNodeConfigAdvancedMachineFeaturesObservation `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
+
+	BootDisk *NodePoolNodeConfigBootDiskObservation `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
 
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
 
@@ -1109,8 +1168,6 @@ type NodePoolNodeConfigObservation_2 struct {
 
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// The configuration of the desired reservation which instances could take capacity from.
-	// Structure is documented below.
 	ReservationAffinity *NodePoolNodeConfigReservationAffinityObservation `json:"reservationAffinity,omitempty" tf:"reservation_affinity,omitempty"`
 
 	// +mapType=granular
@@ -1148,6 +1205,9 @@ type NodePoolNodeConfigParameters_2 struct {
 
 	// +kubebuilder:validation:Optional
 	AdvancedMachineFeatures *NodePoolNodeConfigAdvancedMachineFeaturesParameters `json:"advancedMachineFeatures,omitempty" tf:"advanced_machine_features,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	BootDisk *NodePoolNodeConfigBootDiskParameters `json:"bootDisk,omitempty" tf:"boot_disk,omitempty"`
 
 	// +kubebuilder:validation:Optional
 	BootDiskKMSKey *string `json:"bootDiskKmsKey,omitempty" tf:"boot_disk_kms_key,omitempty"`
@@ -1243,8 +1303,6 @@ type NodePoolNodeConfigParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// The configuration of the desired reservation which instances could take capacity from.
-	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	ReservationAffinity *NodePoolNodeConfigReservationAffinityParameters `json:"reservationAffinity,omitempty" tf:"reservation_affinity,omitempty"`
 

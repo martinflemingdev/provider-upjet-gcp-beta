@@ -16,6 +16,10 @@ import (
 	regionsecuritypolicy "github.com/upbound/provider-gcp-beta/internal/controller/cluster/compute/regionsecuritypolicy"
 	cluster "github.com/upbound/provider-gcp-beta/internal/controller/cluster/container/cluster"
 	nodepool "github.com/upbound/provider-gcp-beta/internal/controller/cluster/container/nodepool"
+	repository "github.com/upbound/provider-gcp-beta/internal/controller/cluster/dataform/repository"
+	repositoryiammember "github.com/upbound/provider-gcp-beta/internal/controller/cluster/dataform/repositoryiammember"
+	repositoryreleaseconfig "github.com/upbound/provider-gcp-beta/internal/controller/cluster/dataform/repositoryreleaseconfig"
+	repositoryworkflowconfig "github.com/upbound/provider-gcp-beta/internal/controller/cluster/dataform/repositoryworkflowconfig"
 	servertlspolicy "github.com/upbound/provider-gcp-beta/internal/controller/cluster/networksecurity/servertlspolicy"
 	providerconfig "github.com/upbound/provider-gcp-beta/internal/controller/cluster/providerconfig"
 )
@@ -31,6 +35,10 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		regionsecuritypolicy.Setup,
 		cluster.Setup,
 		nodepool.Setup,
+		repository.Setup,
+		repositoryiammember.Setup,
+		repositoryreleaseconfig.Setup,
+		repositoryworkflowconfig.Setup,
 		servertlspolicy.Setup,
 		providerconfig.Setup,
 	} {
@@ -52,6 +60,10 @@ func SetupGated_monolith(mgr ctrl.Manager, o controller.Options) error {
 		regionsecuritypolicy.SetupGated,
 		cluster.SetupGated,
 		nodepool.SetupGated,
+		repository.SetupGated,
+		repositoryiammember.SetupGated,
+		repositoryreleaseconfig.SetupGated,
+		repositoryworkflowconfig.SetupGated,
 		servertlspolicy.SetupGated,
 		providerconfig.SetupGated,
 	} {

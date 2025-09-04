@@ -581,6 +581,47 @@ spec:
                           This field is only used with l4 load balancing.
                         type: number
                     type: object
+                  haPolicy:
+                    description: |-
+                      Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+                      The backends of this regional backend service must only specify zonal network endpoint groups
+                      (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+                      be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+                      requires customers to be responsible for tracking backend endpoint health and electing a
+                      leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+                      haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+                      Passthrough Network Load Balancers.
+                      Structure is documented below.
+                    properties:
+                      fastIpMove:
+                        description: |-
+                          Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+                          Supported values are:
+                        type: string
+                      leader:
+                        description: |-
+                          Selects one of the network endpoints attached to the backend NEGs of this service as the
+                          active endpoint (the leader) that receives all traffic.
+                          Structure is documented below.
+                        properties:
+                          backendGroup:
+                            description: |-
+                              A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+                              attached to.
+                            type: string
+                          networkEndpoint:
+                            description: |-
+                              The network endpoint within the leader.backendGroup that is designated as the leader.
+                              Structure is documented below.
+                            properties:
+                              instance:
+                                description: |-
+                                  The name of the VM instance of the leader network endpoint. The instance must
+                                  already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+                                type: string
+                            type: object
+                        type: object
+                    type: object
                   healthChecks:
                     description: |-
                       The set of URLs to HealthCheck resources for health checking
@@ -1472,6 +1513,47 @@ spec:
                           VMs with the best effort, or to all VMs when no VM is healthy.
                           This field is only used with l4 load balancing.
                         type: number
+                    type: object
+                  haPolicy:
+                    description: |-
+                      Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+                      The backends of this regional backend service must only specify zonal network endpoint groups
+                      (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+                      be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+                      requires customers to be responsible for tracking backend endpoint health and electing a
+                      leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+                      haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+                      Passthrough Network Load Balancers.
+                      Structure is documented below.
+                    properties:
+                      fastIpMove:
+                        description: |-
+                          Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+                          Supported values are:
+                        type: string
+                      leader:
+                        description: |-
+                          Selects one of the network endpoints attached to the backend NEGs of this service as the
+                          active endpoint (the leader) that receives all traffic.
+                          Structure is documented below.
+                        properties:
+                          backendGroup:
+                            description: |-
+                              A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+                              attached to.
+                            type: string
+                          networkEndpoint:
+                            description: |-
+                              The network endpoint within the leader.backendGroup that is designated as the leader.
+                              Structure is documented below.
+                            properties:
+                              instance:
+                                description: |-
+                                  The name of the VM instance of the leader network endpoint. The instance must
+                                  already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   healthChecks:
                     description: |-
@@ -2449,6 +2531,47 @@ spec:
                     description: The unique identifier for the resource. This identifier
                       is defined by the server.
                     type: number
+                  haPolicy:
+                    description: |-
+                      Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+                      The backends of this regional backend service must only specify zonal network endpoint groups
+                      (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+                      be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+                      requires customers to be responsible for tracking backend endpoint health and electing a
+                      leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+                      haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+                      Passthrough Network Load Balancers.
+                      Structure is documented below.
+                    properties:
+                      fastIpMove:
+                        description: |-
+                          Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+                          Supported values are:
+                        type: string
+                      leader:
+                        description: |-
+                          Selects one of the network endpoints attached to the backend NEGs of this service as the
+                          active endpoint (the leader) that receives all traffic.
+                          Structure is documented below.
+                        properties:
+                          backendGroup:
+                            description: |-
+                              A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+                              attached to.
+                            type: string
+                          networkEndpoint:
+                            description: |-
+                              The network endpoint within the leader.backendGroup that is designated as the leader.
+                              Structure is documented below.
+                            properties:
+                              instance:
+                                description: |-
+                                  The name of the VM instance of the leader network endpoint. The instance must
+                                  already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+                                type: string
+                            type: object
+                        type: object
+                    type: object
                   healthChecks:
                     description: |-
                       The set of URLs to HealthCheck resources for health checking
