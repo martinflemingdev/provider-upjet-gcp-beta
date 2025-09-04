@@ -54,7 +54,7 @@ GO_REQUIRED_VERSION ?= 1.24
 GOLANGCILINT_VERSION ?= 1.64.8
 
 # SUBPACKAGES ?= $(shell find cmd/provider -type d -maxdepth 1 -mindepth 1 | cut -d/ -f3)
-SUBPACKAGES ?= monolith
+SUBPACKAGES ?= monolith cloudplatform compute container dataform networksecurity
 GO_STATIC_PACKAGES ?= $(GO_PROJECT)/cmd/generator ${SUBPACKAGES:%=$(GO_PROJECT)/cmd/provider/%}
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
 GO_SUBDIRS += cmd internal apis generate
