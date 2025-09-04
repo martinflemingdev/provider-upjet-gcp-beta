@@ -312,6 +312,7 @@ type RepositoryWorkflowConfigParameters struct {
 
 	// A reference to the Dataform repository
 	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/dataform/v1beta1.Repository
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("id", true)
 	// +kubebuilder:validation:Optional
 	Repository *string `json:"repository,omitempty" tf:"repository,omitempty"`
 
