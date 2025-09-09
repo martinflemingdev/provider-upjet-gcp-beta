@@ -177,7 +177,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InvocationConfig.ServiceAccount),
-				Extract:      resource.ExtractParamPath("email", false),
+				Extract:      resource.ExtractParamPath("email", true),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.ForProvider.InvocationConfig.ServiceAccountRef,
 				Selector:     mg.Spec.ForProvider.InvocationConfig.ServiceAccountSelector,
@@ -279,7 +279,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InvocationConfig.ServiceAccount),
-				Extract:      resource.ExtractParamPath("email", false),
+				Extract:      resource.ExtractParamPath("email", true),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.InitProvider.InvocationConfig.ServiceAccountRef,
 				Selector:     mg.Spec.InitProvider.InvocationConfig.ServiceAccountSelector,

@@ -101,7 +101,7 @@ func (mg *RepositoryReleaseConfig) ResolveReferences(ctx context.Context, c clie
 
 	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Repository),
-		Extract:      resource.ExtractParamPath("id", true),
+		Extract:      reference.ExternalName(),
 		Namespace:    mg.GetNamespace(),
 		Reference:    mg.Spec.ForProvider.RepositoryRef,
 		Selector:     mg.Spec.ForProvider.RepositorySelector,
@@ -215,7 +215,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 
 	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Repository),
-		Extract:      resource.ExtractParamPath("id", true),
+		Extract:      reference.ExternalName(),
 		Namespace:    mg.GetNamespace(),
 		Reference:    mg.Spec.ForProvider.RepositoryRef,
 		Selector:     mg.Spec.ForProvider.RepositorySelector,
