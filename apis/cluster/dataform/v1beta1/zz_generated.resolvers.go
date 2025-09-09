@@ -124,7 +124,7 @@ func (mg *RepositoryReleaseConfig) ResolveReferences(ctx context.Context, c clie
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Repository),
-			Extract:      resource.ExtractParamPath("name", false),
+			Extract:      reference.ExternalName(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.RepositoryRef,
 			Selector:     mg.Spec.ForProvider.RepositorySelector,
@@ -177,7 +177,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InvocationConfig.ServiceAccount),
-				Extract:      resource.ExtractParamPath("email", true),
+				Extract:      resource.ExtractParamPath("email", false),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.ForProvider.InvocationConfig.ServiceAccountRef,
 				Selector:     mg.Spec.ForProvider.InvocationConfig.ServiceAccountSelector,
@@ -258,7 +258,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Repository),
-			Extract:      resource.ExtractParamPath("name", false),
+			Extract:      reference.ExternalName(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.RepositoryRef,
 			Selector:     mg.Spec.ForProvider.RepositorySelector,
@@ -279,7 +279,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InvocationConfig.ServiceAccount),
-				Extract:      resource.ExtractParamPath("email", true),
+				Extract:      resource.ExtractParamPath("email", false),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.InitProvider.InvocationConfig.ServiceAccountRef,
 				Selector:     mg.Spec.InitProvider.InvocationConfig.ServiceAccountSelector,
