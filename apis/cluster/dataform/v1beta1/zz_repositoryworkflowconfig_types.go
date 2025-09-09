@@ -65,17 +65,19 @@ type InvocationConfigInitParameters struct {
 	IncludedTargets []IncludedTargetsInitParameters `json:"includedTargets,omitempty" tf:"included_targets,omitempty"`
 
 	// Optional. The service account to run workflow invocations under.
-	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/cloudplatform/v1beta1.ServiceAccount
+	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp/apis/cluster/cloudplatform/v1beta1.ServiceAccount
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("email", false)
+	// +crossplane:generate:reference:refFieldName=ServiceAccountGaRef
+	// +crossplane:generate:reference:selectorFieldName=ServiceAccountGaSelector
 	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
 
 	// Reference to a ServiceAccount in cloudplatform to populate serviceAccount.
 	// +kubebuilder:validation:Optional
-	ServiceAccountRef *v1.Reference `json:"serviceAccountRef,omitempty" tf:"-"`
+	ServiceAccountGaRef *v1.Reference `json:"serviceAccountGaRef,omitempty" tf:"-"`
 
 	// Selector for a ServiceAccount in cloudplatform to populate serviceAccount.
 	// +kubebuilder:validation:Optional
-	ServiceAccountSelector *v1.Selector `json:"serviceAccountSelector,omitempty" tf:"-"`
+	ServiceAccountGaSelector *v1.Selector `json:"serviceAccountGaSelector,omitempty" tf:"-"`
 
 	// Optional. When set to true, transitive dependencies of included actions will be executed.
 	TransitiveDependenciesIncluded *bool `json:"transitiveDependenciesIncluded,omitempty" tf:"transitive_dependencies_included,omitempty"`
@@ -122,18 +124,20 @@ type InvocationConfigParameters struct {
 	IncludedTargets []IncludedTargetsParameters `json:"includedTargets,omitempty" tf:"included_targets,omitempty"`
 
 	// Optional. The service account to run workflow invocations under.
-	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp-beta/apis/cluster/cloudplatform/v1beta1.ServiceAccount
+	// +crossplane:generate:reference:type=github.com/upbound/provider-gcp/apis/cluster/cloudplatform/v1beta1.ServiceAccount
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("email", false)
+	// +crossplane:generate:reference:refFieldName=ServiceAccountGaRef
+	// +crossplane:generate:reference:selectorFieldName=ServiceAccountGaSelector
 	// +kubebuilder:validation:Optional
 	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
 
 	// Reference to a ServiceAccount in cloudplatform to populate serviceAccount.
 	// +kubebuilder:validation:Optional
-	ServiceAccountRef *v1.Reference `json:"serviceAccountRef,omitempty" tf:"-"`
+	ServiceAccountGaRef *v1.Reference `json:"serviceAccountGaRef,omitempty" tf:"-"`
 
 	// Selector for a ServiceAccount in cloudplatform to populate serviceAccount.
 	// +kubebuilder:validation:Optional
-	ServiceAccountSelector *v1.Selector `json:"serviceAccountSelector,omitempty" tf:"-"`
+	ServiceAccountGaSelector *v1.Selector `json:"serviceAccountGaSelector,omitempty" tf:"-"`
 
 	// Optional. When set to true, transitive dependencies of included actions will be executed.
 	// +kubebuilder:validation:Optional

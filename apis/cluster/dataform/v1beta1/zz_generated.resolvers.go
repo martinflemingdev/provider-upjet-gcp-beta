@@ -179,8 +179,8 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 				CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InvocationConfig.ServiceAccount),
 				Extract:      resource.ExtractParamPath("email", false),
 				Namespace:    mg.GetNamespace(),
-				Reference:    mg.Spec.ForProvider.InvocationConfig.ServiceAccountRef,
-				Selector:     mg.Spec.ForProvider.InvocationConfig.ServiceAccountSelector,
+				Reference:    mg.Spec.ForProvider.InvocationConfig.ServiceAccountGaRef,
+				Selector:     mg.Spec.ForProvider.InvocationConfig.ServiceAccountGaSelector,
 				To:           reference.To{List: l, Managed: m},
 			})
 		}
@@ -188,7 +188,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			return errors.Wrap(err, "mg.Spec.ForProvider.InvocationConfig.ServiceAccount")
 		}
 		mg.Spec.ForProvider.InvocationConfig.ServiceAccount = reference.ToPtrValue(rsp.ResolvedValue)
-		mg.Spec.ForProvider.InvocationConfig.ServiceAccountRef = rsp.ResolvedReference
+		mg.Spec.ForProvider.InvocationConfig.ServiceAccountGaRef = rsp.ResolvedReference
 
 	}
 	{
@@ -281,8 +281,8 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 				CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InvocationConfig.ServiceAccount),
 				Extract:      resource.ExtractParamPath("email", false),
 				Namespace:    mg.GetNamespace(),
-				Reference:    mg.Spec.InitProvider.InvocationConfig.ServiceAccountRef,
-				Selector:     mg.Spec.InitProvider.InvocationConfig.ServiceAccountSelector,
+				Reference:    mg.Spec.InitProvider.InvocationConfig.ServiceAccountGaRef,
+				Selector:     mg.Spec.InitProvider.InvocationConfig.ServiceAccountGaSelector,
 				To:           reference.To{List: l, Managed: m},
 			})
 		}
@@ -290,7 +290,7 @@ func (mg *RepositoryWorkflowConfig) ResolveReferences(ctx context.Context, c cli
 			return errors.Wrap(err, "mg.Spec.InitProvider.InvocationConfig.ServiceAccount")
 		}
 		mg.Spec.InitProvider.InvocationConfig.ServiceAccount = reference.ToPtrValue(rsp.ResolvedValue)
-		mg.Spec.InitProvider.InvocationConfig.ServiceAccountRef = rsp.ResolvedReference
+		mg.Spec.InitProvider.InvocationConfig.ServiceAccountGaRef = rsp.ResolvedReference
 
 	}
 	{

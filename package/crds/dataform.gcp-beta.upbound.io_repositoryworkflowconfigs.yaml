@@ -115,7 +115,7 @@ spec:
                         description: Optional. The service account to run workflow
                           invocations under.
                         type: string
-                      serviceAccountRef:
+                      serviceAccountGaRef:
                         description: Reference to a ServiceAccount in cloudplatform
                           to populate serviceAccount.
                         properties:
@@ -150,7 +150,7 @@ spec:
                         required:
                         - name
                         type: object
-                      serviceAccountSelector:
+                      serviceAccountGaSelector:
                         description: Selector for a ServiceAccount in cloudplatform
                           to populate serviceAccount.
                         properties:
@@ -580,7 +580,7 @@ spec:
                         description: Optional. The service account to run workflow
                           invocations under.
                         type: string
-                      serviceAccountRef:
+                      serviceAccountGaRef:
                         description: Reference to a ServiceAccount in cloudplatform
                           to populate serviceAccount.
                         properties:
@@ -615,7 +615,7 @@ spec:
                         required:
                         - name
                         type: object
-                      serviceAccountSelector:
+                      serviceAccountGaSelector:
                         description: Selector for a ServiceAccount in cloudplatform
                           to populate serviceAccount.
                         properties:

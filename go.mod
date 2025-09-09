@@ -12,6 +12,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
 	github.com/hashicorp/terraform-provider-google-beta v1.20.1-0.20250812173325-375b47bde290
 	github.com/pkg/errors v0.9.1
+	github.com/upbound/provider-gcp v1.14.1-0.20250811123750-31b17547a6cb
 	google.golang.org/grpc v1.73.0
 	k8s.io/api v0.33.0
 	k8s.io/apiextensions-apiserver v0.33.0

@@ -587,13 +587,13 @@ func (in *InvocationConfigInitParameters) DeepCopyInto(out *InvocationConfigInit
 		*out = new(string)
 		**out = **in
 	}
-	if in.ServiceAccountRef != nil {
-		in, out := &in.ServiceAccountRef, &out.ServiceAccountRef
+	if in.ServiceAccountGaRef != nil {
+		in, out := &in.ServiceAccountGaRef, &out.ServiceAccountGaRef
 		*out = new(v1.Reference)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.ServiceAccountSelector != nil {
-		in, out := &in.ServiceAccountSelector, &out.ServiceAccountSelector
+	if in.ServiceAccountGaSelector != nil {
+		in, out := &in.ServiceAccountGaSelector, &out.ServiceAccountGaSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
@@ -703,13 +703,13 @@ func (in *InvocationConfigParameters) DeepCopyInto(out *InvocationConfigParamete
 		*out = new(string)
 		**out = **in
 	}
-	if in.ServiceAccountRef != nil {
-		in, out := &in.ServiceAccountRef, &out.ServiceAccountRef
+	if in.ServiceAccountGaRef != nil {
+		in, out := &in.ServiceAccountGaRef, &out.ServiceAccountGaRef
 		*out = new(v1.Reference)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.ServiceAccountSelector != nil {
-		in, out := &in.ServiceAccountSelector, &out.ServiceAccountSelector
+	if in.ServiceAccountGaSelector != nil {
+		in, out := &in.ServiceAccountGaSelector, &out.ServiceAccountGaSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}

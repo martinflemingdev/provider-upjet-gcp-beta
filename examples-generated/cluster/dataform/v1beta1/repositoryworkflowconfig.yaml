@@ -20,7 +20,7 @@ spec:
       - database: gcp-example-project
         name: target_2
         schema: example-dataset
-      serviceAccountSelector:
+      serviceAccountGaSelector:
         matchLabels:
           testing.upbound.io/example-name: dataform_sa
       transitiveDependenciesIncluded: true
