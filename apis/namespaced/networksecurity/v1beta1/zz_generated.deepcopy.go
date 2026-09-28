@@ -533,6 +533,11 @@ func (in *ServerTLSPolicyInitParameters) DeepCopyInto(out *ServerTLSPolicyInitPa
 		*out = new(bool)
 		**out = **in
 	}
+	if in.DeletionPolicy != nil {
+		in, out := &in.DeletionPolicy, &out.DeletionPolicy
+		*out = new(string)
+		**out = **in
+	}
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
@@ -623,6 +628,11 @@ func (in *ServerTLSPolicyObservation) DeepCopyInto(out *ServerTLSPolicyObservati
 	}
 	if in.CreateTime != nil {
 		in, out := &in.CreateTime, &out.CreateTime
+		*out = new(string)
+		**out = **in
+	}
+	if in.DeletionPolicy != nil {
+		in, out := &in.DeletionPolicy, &out.DeletionPolicy
 		*out = new(string)
 		**out = **in
 	}
@@ -727,6 +737,11 @@ func (in *ServerTLSPolicyParameters) DeepCopyInto(out *ServerTLSPolicyParameters
 	if in.AllowOpen != nil {
 		in, out := &in.AllowOpen, &out.AllowOpen
 		*out = new(bool)
+		**out = **in
+	}
+	if in.DeletionPolicy != nil {
+		in, out := &in.DeletionPolicy, &out.DeletionPolicy
+		*out = new(string)
 		**out = **in
 	}
 	if in.Description != nil {

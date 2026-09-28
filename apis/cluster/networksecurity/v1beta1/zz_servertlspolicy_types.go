@@ -229,6 +229,10 @@ type ServerTLSPolicyInitParameters struct {
 	// Consider using it if you wish to upgrade in place your deployment to TLS while having mixed TLS and non-TLS traffic reaching port :80.
 	AllowOpen *bool `json:"allowOpen,omitempty" tf:"allow_open,omitempty"`
 
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
+
 	// A free-text description of the resource. Max length 1024 characters.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
@@ -261,6 +265,10 @@ type ServerTLSPolicyObservation struct {
 
 	// Time the ServerTlsPolicy was created in UTC.
 	CreateTime *string `json:"createTime,omitempty" tf:"create_time,omitempty"`
+
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
 
 	// A free-text description of the resource. Max length 1024 characters.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -310,6 +318,11 @@ type ServerTLSPolicyParameters struct {
 	// Consider using it if you wish to upgrade in place your deployment to TLS while having mixed TLS and non-TLS traffic reaching port :80.
 	// +kubebuilder:validation:Optional
 	AllowOpen *bool `json:"allowOpen,omitempty" tf:"allow_open,omitempty"`
+
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	// +kubebuilder:validation:Optional
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
 
 	// A free-text description of the resource. Max length 1024 characters.
 	// +kubebuilder:validation:Optional

@@ -34,7 +34,7 @@
 // Run upjet's transformer for the generated resolvers to get rid of the cross
 // API-group imports and to prevent import cycles
 //go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g gcp-beta.upbound.io -a github.com/upbound/provider-gcp-beta/internal/apis -s -p ../apis/cluster/...
-//go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g gcp-beta.m.upbound.io -a github.com/upbound/provider-gcp-beta/internal/apis -s -p ../apis/namespaced/..
+//go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g gcp-beta.m.upbound.io -a github.com/upbound/provider-gcp-beta/internal/apis -s -p ../apis/namespaced/...
 
 package generate
 

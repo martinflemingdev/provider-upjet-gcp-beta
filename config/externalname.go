@@ -42,6 +42,17 @@ var terraformPluginSDKExternalNameConfigs = map[string]config.ExternalName{
 	"google_compute_region_security_policy": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/regions/{{ .parameters.region }}/securityPolicies/{{ .external_name }}"),
 	// Imported by using projects/{{project}}/regions/{{region}}/backendServices/{{name}}
 	"google_compute_region_backend_service": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/regions/{{ .parameters.region }}/backendServices/{{ .external_name }}"),
+
+	// dataform
+	//
+	// Imported by using projects/{{project}}/locations/{{region}}/repositories/{{name}}
+	"google_dataform_repository": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/locations/{{ .parameters.region }}/repositories/{{ .external_name }}"),
+	// Imported by using the following format: projects/{{project}}/locations/{{region}}/repositories/{{repository}} roles/viewer user:jane@example.com
+	"google_dataform_repository_iam_member": config.IdentifierFromProvider,
+	// Imported by using projects/{{project}}/locations/{{region}}/repositories/{{repository}}/releaseConfigs/{{name}}
+	"google_dataform_repository_release_config": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/locations/{{ .parameters.region }}/repositories/{{ .parameters.repository }}/releaseConfigs/{{ .external_name }}"),
+	// Imported by using projects/{{project}}/locations/{{region}}/repositories/{{repository}}/workflowConfigs/{{name}}
+	"google_dataform_repository_workflow_config": config.TemplatedStringAsIdentifier("name", "projects/{{ if .parameters.project }}{{ .parameters.project }}{{ else }}{{ .setup.configuration.project }}{{ end }}/locations/{{ .parameters.region }}/repositories/{{ .parameters.repository }}/workflowConfigs/{{ .external_name }}"),
 }
 
 // cliReconciledExternalNameConfigs contains all external name configurations

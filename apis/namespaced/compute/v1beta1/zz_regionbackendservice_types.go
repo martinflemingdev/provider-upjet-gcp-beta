@@ -88,6 +88,19 @@ type BackendInitParameters struct {
 	// maxConnectionsPerInstance must be set.
 	MaxConnectionsPerInstance *float64 `json:"maxConnectionsPerInstance,omitempty" tf:"max_connections_per_instance,omitempty"`
 
+	// Defines a maximum number of in-flight requests for the whole NEG
+	// or instance group. Not available if backend's balancingMode is RATE
+	// or CONNECTION.
+	MaxInFlightRequests *float64 `json:"maxInFlightRequests,omitempty" tf:"max_in_flight_requests,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single endpoint.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	MaxInFlightRequestsPerEndpoint *float64 `json:"maxInFlightRequestsPerEndpoint,omitempty" tf:"max_in_flight_requests_per_endpoint,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single VM.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	MaxInFlightRequestsPerInstance *float64 `json:"maxInFlightRequestsPerInstance,omitempty" tf:"max_in_flight_requests_per_instance,omitempty"`
+
 	// The max requests per second (RPS) of the group. Cannot be set
 	// for INTERNAL backend services.
 	// Can be used with either RATE or UTILIZATION balancing modes,
@@ -114,6 +127,9 @@ type BackendInitParameters struct {
 	// CPU utilization target for the group. Valid range is [0.0, 1.0].
 	// Cannot be set for INTERNAL backend services.
 	MaxUtilization *float64 `json:"maxUtilization,omitempty" tf:"max_utilization,omitempty"`
+
+	// This field specifies how long a connection should be kept alive for:
+	TrafficDuration *string `json:"trafficDuration,omitempty" tf:"traffic_duration,omitempty"`
 }
 
 type BackendObservation struct {
@@ -191,6 +207,19 @@ type BackendObservation struct {
 	// maxConnectionsPerInstance must be set.
 	MaxConnectionsPerInstance *float64 `json:"maxConnectionsPerInstance,omitempty" tf:"max_connections_per_instance,omitempty"`
 
+	// Defines a maximum number of in-flight requests for the whole NEG
+	// or instance group. Not available if backend's balancingMode is RATE
+	// or CONNECTION.
+	MaxInFlightRequests *float64 `json:"maxInFlightRequests,omitempty" tf:"max_in_flight_requests,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single endpoint.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	MaxInFlightRequestsPerEndpoint *float64 `json:"maxInFlightRequestsPerEndpoint,omitempty" tf:"max_in_flight_requests_per_endpoint,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single VM.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	MaxInFlightRequestsPerInstance *float64 `json:"maxInFlightRequestsPerInstance,omitempty" tf:"max_in_flight_requests_per_instance,omitempty"`
+
 	// The max requests per second (RPS) of the group. Cannot be set
 	// for INTERNAL backend services.
 	// Can be used with either RATE or UTILIZATION balancing modes,
@@ -217,6 +246,9 @@ type BackendObservation struct {
 	// CPU utilization target for the group. Valid range is [0.0, 1.0].
 	// Cannot be set for INTERNAL backend services.
 	MaxUtilization *float64 `json:"maxUtilization,omitempty" tf:"max_utilization,omitempty"`
+
+	// This field specifies how long a connection should be kept alive for:
+	TrafficDuration *string `json:"trafficDuration,omitempty" tf:"traffic_duration,omitempty"`
 }
 
 type BackendParameters struct {
@@ -303,6 +335,22 @@ type BackendParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxConnectionsPerInstance *float64 `json:"maxConnectionsPerInstance,omitempty" tf:"max_connections_per_instance,omitempty"`
 
+	// Defines a maximum number of in-flight requests for the whole NEG
+	// or instance group. Not available if backend's balancingMode is RATE
+	// or CONNECTION.
+	// +kubebuilder:validation:Optional
+	MaxInFlightRequests *float64 `json:"maxInFlightRequests,omitempty" tf:"max_in_flight_requests,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single endpoint.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	// +kubebuilder:validation:Optional
+	MaxInFlightRequestsPerEndpoint *float64 `json:"maxInFlightRequestsPerEndpoint,omitempty" tf:"max_in_flight_requests_per_endpoint,omitempty"`
+
+	// Defines a maximum number of in-flight requests for a single VM.
+	// Not available if backend's balancingMode is RATE or CONNECTION.
+	// +kubebuilder:validation:Optional
+	MaxInFlightRequestsPerInstance *float64 `json:"maxInFlightRequestsPerInstance,omitempty" tf:"max_in_flight_requests_per_instance,omitempty"`
+
 	// The max requests per second (RPS) of the group. Cannot be set
 	// for INTERNAL backend services.
 	// Can be used with either RATE or UTILIZATION balancing modes,
@@ -333,6 +381,10 @@ type BackendParameters struct {
 	// Cannot be set for INTERNAL backend services.
 	// +kubebuilder:validation:Optional
 	MaxUtilization *float64 `json:"maxUtilization,omitempty" tf:"max_utilization,omitempty"`
+
+	// This field specifies how long a connection should be kept alive for:
+	// +kubebuilder:validation:Optional
+	TrafficDuration *string `json:"trafficDuration,omitempty" tf:"traffic_duration,omitempty"`
 }
 
 type BaseEjectionTimeInitParameters struct {
@@ -999,6 +1051,10 @@ type CustomMetricsParameters struct {
 
 type DynamicForwardingInitParameters struct {
 
+	// Dynamic Forwarding Proxy configuration.
+	// Structure is documented below.
+	ForwardProxy *ForwardProxyInitParameters `json:"forwardProxy,omitempty" tf:"forward_proxy,omitempty"`
+
 	// IP:PORT based dynamic forwarding configuration.
 	// Structure is documented below.
 	IPPortSelection *IPPortSelectionInitParameters `json:"ipPortSelection,omitempty" tf:"ip_port_selection,omitempty"`
@@ -1006,12 +1062,21 @@ type DynamicForwardingInitParameters struct {
 
 type DynamicForwardingObservation struct {
 
+	// Dynamic Forwarding Proxy configuration.
+	// Structure is documented below.
+	ForwardProxy *ForwardProxyObservation `json:"forwardProxy,omitempty" tf:"forward_proxy,omitempty"`
+
 	// IP:PORT based dynamic forwarding configuration.
 	// Structure is documented below.
 	IPPortSelection *IPPortSelectionObservation `json:"ipPortSelection,omitempty" tf:"ip_port_selection,omitempty"`
 }
 
 type DynamicForwardingParameters struct {
+
+	// Dynamic Forwarding Proxy configuration.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	ForwardProxy *ForwardProxyParameters `json:"forwardProxy,omitempty" tf:"forward_proxy,omitempty"`
 
 	// IP:PORT based dynamic forwarding configuration.
 	// Structure is documented below.
@@ -1109,6 +1174,38 @@ type FailoverPolicyParameters struct {
 	FailoverRatio *float64 `json:"failoverRatio,omitempty" tf:"failover_ratio,omitempty"`
 }
 
+type ForwardProxyInitParameters struct {
+
+	// A boolean flag enabling IP:PORT based dynamic forwarding.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// Determines the dynamic forwarding proxy mode
+	// Possible values are: DIRECT_FORWARDING, CLOUD_RUN.
+	ProxyMode *string `json:"proxyMode,omitempty" tf:"proxy_mode,omitempty"`
+}
+
+type ForwardProxyObservation struct {
+
+	// A boolean flag enabling IP:PORT based dynamic forwarding.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// Determines the dynamic forwarding proxy mode
+	// Possible values are: DIRECT_FORWARDING, CLOUD_RUN.
+	ProxyMode *string `json:"proxyMode,omitempty" tf:"proxy_mode,omitempty"`
+}
+
+type ForwardProxyParameters struct {
+
+	// A boolean flag enabling IP:PORT based dynamic forwarding.
+	// +kubebuilder:validation:Optional
+	Enabled *bool `json:"enabled" tf:"enabled,omitempty"`
+
+	// Determines the dynamic forwarding proxy mode
+	// Possible values are: DIRECT_FORWARDING, CLOUD_RUN.
+	// +kubebuilder:validation:Optional
+	ProxyMode *string `json:"proxyMode" tf:"proxy_mode,omitempty"`
+}
+
 type HTTPCookieInitParameters struct {
 
 	// Name of the cookie.
@@ -1149,6 +1246,44 @@ type HTTPCookieParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	TTL *TTLParameters `json:"ttl,omitempty" tf:"ttl,omitempty"`
+}
+
+type HaPolicyInitParameters struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	Leader *LeaderInitParameters `json:"leader,omitempty" tf:"leader,omitempty"`
+}
+
+type HaPolicyObservation struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	Leader *LeaderObservation `json:"leader,omitempty" tf:"leader,omitempty"`
+}
+
+type HaPolicyParameters struct {
+
+	// Specifies whether fast IP move is enabled, and if so, the mechanism to achieve it.
+	// Supported values are:
+	// +kubebuilder:validation:Optional
+	FastIPMove *string `json:"fastIpMove,omitempty" tf:"fast_ip_move,omitempty"`
+
+	// Selects one of the network endpoints attached to the backend NEGs of this service as the
+	// active endpoint (the leader) that receives all traffic.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	Leader *LeaderParameters `json:"leader,omitempty" tf:"leader,omitempty"`
 }
 
 type IPPortSelectionInitParameters struct {
@@ -1249,6 +1384,41 @@ type IntervalParameters struct {
 	Seconds *float64 `json:"seconds" tf:"seconds,omitempty"`
 }
 
+type LeaderInitParameters struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	NetworkEndpoint *NetworkEndpointInitParameters `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
+type LeaderObservation struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	NetworkEndpoint *NetworkEndpointObservation `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
+type LeaderParameters struct {
+
+	// A fully-qualified URL of the zonal Network Endpoint Group (NEG) that the leader is
+	// attached to.
+	// +kubebuilder:validation:Optional
+	BackendGroup *string `json:"backendGroup,omitempty" tf:"backend_group,omitempty"`
+
+	// The network endpoint within the leader.backendGroup that is designated as the leader.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	NetworkEndpoint *NetworkEndpointParameters `json:"networkEndpoint,omitempty" tf:"network_endpoint,omitempty"`
+}
+
 type NegativeCachingPolicyInitParameters struct {
 
 	// The HTTP status code to define a TTL against. Only HTTP status codes 300, 301, 308, 404, 405, 410, 421, 451 and 501
@@ -1282,6 +1452,50 @@ type NegativeCachingPolicyParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
+}
+
+type NetworkEndpointInitParameters struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
+}
+
+type NetworkEndpointObservation struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
+}
+
+type NetworkEndpointParameters struct {
+
+	// The name of the VM instance of the leader network endpoint. The instance must
+	// already be attached to the NEG specified in the haPolicy.leader.backendGroup.
+	// +kubebuilder:validation:Optional
+	Instance *string `json:"instance,omitempty" tf:"instance,omitempty"`
+}
+
+type NetworkPassThroughLBTrafficPolicyInitParameters struct {
+
+	// When configured, new connections are load balanced across healthy backend endpoints in the local zone.
+	// Structure is documented below.
+	ZonalAffinity *ZonalAffinityInitParameters `json:"zonalAffinity,omitempty" tf:"zonal_affinity,omitempty"`
+}
+
+type NetworkPassThroughLBTrafficPolicyObservation struct {
+
+	// When configured, new connections are load balanced across healthy backend endpoints in the local zone.
+	// Structure is documented below.
+	ZonalAffinity *ZonalAffinityObservation `json:"zonalAffinity,omitempty" tf:"zonal_affinity,omitempty"`
+}
+
+type NetworkPassThroughLBTrafficPolicyParameters struct {
+
+	// When configured, new connections are load balanced across healthy backend endpoints in the local zone.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	ZonalAffinity *ZonalAffinityParameters `json:"zonalAffinity,omitempty" tf:"zonal_affinity,omitempty"`
 }
 
 type OutlierDetectionInitParameters struct {
@@ -1487,6 +1701,34 @@ type OutlierDetectionParameters struct {
 	SuccessRateStdevFactor *float64 `json:"successRateStdevFactor,omitempty" tf:"success_rate_stdev_factor,omitempty"`
 }
 
+type ParamsInitParameters struct {
+
+	// Resource manager tags to be bound to the region backend service. Tag keys and values have the
+	// same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id},
+	// and values are in the format tagValues/456.
+	// +mapType=granular
+	ResourceManagerTags map[string]*string `json:"resourceManagerTags,omitempty" tf:"resource_manager_tags,omitempty"`
+}
+
+type ParamsObservation struct {
+
+	// Resource manager tags to be bound to the region backend service. Tag keys and values have the
+	// same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id},
+	// and values are in the format tagValues/456.
+	// +mapType=granular
+	ResourceManagerTags map[string]*string `json:"resourceManagerTags,omitempty" tf:"resource_manager_tags,omitempty"`
+}
+
+type ParamsParameters struct {
+
+	// Resource manager tags to be bound to the region backend service. Tag keys and values have the
+	// same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id},
+	// and values are in the format tagValues/456.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	ResourceManagerTags map[string]*string `json:"resourceManagerTags,omitempty" tf:"resource_manager_tags,omitempty"`
+}
+
 type RegionBackendServiceCustomMetricsInitParameters struct {
 
 	// If true, the metric data is collected and reported to Cloud
@@ -1589,6 +1831,10 @@ type RegionBackendServiceInitParameters struct {
 	// Structure is documented below.
 	CustomMetrics []RegionBackendServiceCustomMetricsInitParameters `json:"customMetrics,omitempty" tf:"custom_metrics,omitempty"`
 
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
+
 	// An optional description of this resource.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
@@ -1603,6 +1849,17 @@ type RegionBackendServiceInitParameters struct {
 	// Policy for failovers.
 	// Structure is documented below.
 	FailoverPolicy *FailoverPolicyInitParameters `json:"failoverPolicy,omitempty" tf:"failover_policy,omitempty"`
+
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	HaPolicy *HaPolicyInitParameters `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
 
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health
@@ -1644,14 +1901,24 @@ type RegionBackendServiceInitParameters struct {
 	LogConfig *RegionBackendServiceLogConfigInitParameters `json:"logConfig,omitempty" tf:"log_config,omitempty"`
 
 	// The URL of the network to which this backend service belongs.
-	// This field can only be specified when the load balancing scheme is set to INTERNAL.
+	// This field must be set for Internal Passthrough Network Load Balancers when the haPolicy is enabled, and for External Passthrough Network Load Balancers when the haPolicy fastIpMove is enabled.
+	// This field can only be specified when the load balancing scheme is set to INTERNAL, or when the load balancing scheme is set to EXTERNAL and haPolicy fastIpMove is enabled.
+	// Changes to this field force recreation of the resource.
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Configures traffic steering properties of internal passthrough Network Load Balancers.
+	// Structure is documented below.
+	NetworkPassThroughLBTrafficPolicy *NetworkPassThroughLBTrafficPolicyInitParameters `json:"networkPassThroughLbTrafficPolicy,omitempty" tf:"network_pass_through_lb_traffic_policy,omitempty"`
 
 	// Settings controlling eviction of unhealthy hosts from the load balancing pool.
 	// This field is applicable only when the load_balancing_scheme is set
 	// to INTERNAL_MANAGED and the protocol is set to HTTP, HTTPS, HTTP2 or H2C.
 	// Structure is documented below.
 	OutlierDetection *OutlierDetectionInitParameters `json:"outlierDetection,omitempty" tf:"outlier_detection,omitempty"`
+
+	// Additional params passed with the request, but not persisted as part of resource payload
+	// Structure is documented below.
+	Params *ParamsInitParameters `json:"params,omitempty" tf:"params,omitempty"`
 
 	// A named port on a backend instance group representing the port for
 	// communication to the backend VMs in that group. Required when the
@@ -1685,6 +1952,10 @@ type RegionBackendServiceInitParameters struct {
 	// Structure is documented below.
 	Subsetting *SubsettingInitParameters `json:"subsetting,omitempty" tf:"subsetting,omitempty"`
 
+	// Configuration for Backend Authenticated TLS and mTLS. May only be specified when the backend protocol is SSL, HTTPS or HTTP2.
+	// Structure is documented below.
+	TLSSettings *TLSSettingsInitParameters `json:"tlsSettings,omitempty" tf:"tls_settings,omitempty"`
+
 	// The backend service timeout has a different meaning depending on the type of load balancer.
 	// For more information see, Backend service settings.
 	// The default is 30 seconds.
@@ -1705,6 +1976,14 @@ type RegionBackendServiceLogConfigInitParameters struct {
 	// Possible values are: INCLUDE_ALL_OPTIONAL, EXCLUDE_ALL_OPTIONAL, CUSTOM.
 	OptionalMode *string `json:"optionalMode,omitempty" tf:"optional_mode,omitempty"`
 
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of request headers to be logged.
+	// Structure is documented below.
+	RequestHeaders []RequestHeadersInitParameters `json:"requestHeaders,omitempty" tf:"request_headers,omitempty"`
+
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of response headers to be logged.
+	// Structure is documented below.
+	ResponseHeaders []ResponseHeadersInitParameters `json:"responseHeaders,omitempty" tf:"response_headers,omitempty"`
+
 	// This field can only be specified if logging is enabled for this backend service. The value of
 	// the field must be in [0, 1]. This configures the sampling rate of requests to the load balancer
 	// where 1.0 means all logged requests are reported and 0.0 means no logged requests are reported.
@@ -1724,6 +2003,14 @@ type RegionBackendServiceLogConfigObservation struct {
 	// Supported values: INCLUDE_ALL_OPTIONAL, EXCLUDE_ALL_OPTIONAL, CUSTOM.
 	// Possible values are: INCLUDE_ALL_OPTIONAL, EXCLUDE_ALL_OPTIONAL, CUSTOM.
 	OptionalMode *string `json:"optionalMode,omitempty" tf:"optional_mode,omitempty"`
+
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of request headers to be logged.
+	// Structure is documented below.
+	RequestHeaders []RequestHeadersObservation `json:"requestHeaders,omitempty" tf:"request_headers,omitempty"`
+
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of response headers to be logged.
+	// Structure is documented below.
+	ResponseHeaders []ResponseHeadersObservation `json:"responseHeaders,omitempty" tf:"response_headers,omitempty"`
 
 	// This field can only be specified if logging is enabled for this backend service. The value of
 	// the field must be in [0, 1]. This configures the sampling rate of requests to the load balancer
@@ -1747,6 +2034,16 @@ type RegionBackendServiceLogConfigParameters struct {
 	// Possible values are: INCLUDE_ALL_OPTIONAL, EXCLUDE_ALL_OPTIONAL, CUSTOM.
 	// +kubebuilder:validation:Optional
 	OptionalMode *string `json:"optionalMode,omitempty" tf:"optional_mode,omitempty"`
+
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of request headers to be logged.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	RequestHeaders []RequestHeadersParameters `json:"requestHeaders,omitempty" tf:"request_headers,omitempty"`
+
+	// This field can only be specified if logging is enabled for this backend service and if the BackendService protocol is one of HTTP, HTTPS, HTTP2 and GRPC. Contains a list of response headers to be logged.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	ResponseHeaders []ResponseHeadersParameters `json:"responseHeaders,omitempty" tf:"response_headers,omitempty"`
 
 	// This field can only be specified if logging is enabled for this backend service. The value of
 	// the field must be in [0, 1]. This configures the sampling rate of requests to the load balancer
@@ -1805,6 +2102,10 @@ type RegionBackendServiceObservation struct {
 	// Structure is documented below.
 	CustomMetrics []RegionBackendServiceCustomMetricsObservation `json:"customMetrics,omitempty" tf:"custom_metrics,omitempty"`
 
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
+
 	// An optional description of this resource.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
@@ -1826,6 +2127,17 @@ type RegionBackendServiceObservation struct {
 
 	// The unique identifier for the resource. This identifier is defined by the server.
 	GeneratedID *float64 `json:"generatedId,omitempty" tf:"generated_id,omitempty"`
+
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	HaPolicy *HaPolicyObservation `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
 
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health
@@ -1860,14 +2172,24 @@ type RegionBackendServiceObservation struct {
 	LogConfig *RegionBackendServiceLogConfigObservation `json:"logConfig,omitempty" tf:"log_config,omitempty"`
 
 	// The URL of the network to which this backend service belongs.
-	// This field can only be specified when the load balancing scheme is set to INTERNAL.
+	// This field must be set for Internal Passthrough Network Load Balancers when the haPolicy is enabled, and for External Passthrough Network Load Balancers when the haPolicy fastIpMove is enabled.
+	// This field can only be specified when the load balancing scheme is set to INTERNAL, or when the load balancing scheme is set to EXTERNAL and haPolicy fastIpMove is enabled.
+	// Changes to this field force recreation of the resource.
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Configures traffic steering properties of internal passthrough Network Load Balancers.
+	// Structure is documented below.
+	NetworkPassThroughLBTrafficPolicy *NetworkPassThroughLBTrafficPolicyObservation `json:"networkPassThroughLbTrafficPolicy,omitempty" tf:"network_pass_through_lb_traffic_policy,omitempty"`
 
 	// Settings controlling eviction of unhealthy hosts from the load balancing pool.
 	// This field is applicable only when the load_balancing_scheme is set
 	// to INTERNAL_MANAGED and the protocol is set to HTTP, HTTPS, HTTP2 or H2C.
 	// Structure is documented below.
 	OutlierDetection *OutlierDetectionObservation `json:"outlierDetection,omitempty" tf:"outlier_detection,omitempty"`
+
+	// Additional params passed with the request, but not persisted as part of resource payload
+	// Structure is documented below.
+	Params *ParamsObservation `json:"params,omitempty" tf:"params,omitempty"`
 
 	// A named port on a backend instance group representing the port for
 	// communication to the backend VMs in that group. Required when the
@@ -1907,6 +2229,10 @@ type RegionBackendServiceObservation struct {
 	// Subsetting configuration for this BackendService. Currently this is applicable only for Internal TCP/UDP load balancing and Internal HTTP(S) load balancing.
 	// Structure is documented below.
 	Subsetting *SubsettingObservation `json:"subsetting,omitempty" tf:"subsetting,omitempty"`
+
+	// Configuration for Backend Authenticated TLS and mTLS. May only be specified when the backend protocol is SSL, HTTPS or HTTP2.
+	// Structure is documented below.
+	TLSSettings *TLSSettingsObservation `json:"tlsSettings,omitempty" tf:"tls_settings,omitempty"`
 
 	// The backend service timeout has a different meaning depending on the type of load balancer.
 	// For more information see, Backend service settings.
@@ -1969,6 +2295,11 @@ type RegionBackendServiceParameters struct {
 	// +kubebuilder:validation:Optional
 	CustomMetrics []RegionBackendServiceCustomMetricsParameters `json:"customMetrics,omitempty" tf:"custom_metrics,omitempty"`
 
+	// Defaults to DELETE.
+	// When set to "DELETE", deleting the resource is allowed.
+	// +kubebuilder:validation:Optional
+	DeletionPolicy *string `json:"deletionPolicy,omitempty" tf:"deletion_policy,omitempty"`
+
 	// An optional description of this resource.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -1987,6 +2318,18 @@ type RegionBackendServiceParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	FailoverPolicy *FailoverPolicyParameters `json:"failoverPolicy,omitempty" tf:"failover_policy,omitempty"`
+
+	// Configures self-managed High Availability (HA) for External and Internal Protocol Forwarding.
+	// The backends of this regional backend service must only specify zonal network endpoint groups
+	// (NEGs) of type GCE_VM_IP. Note that haPolicy is not for load balancing, and therefore cannot
+	// be specified with sessionAffinity, connectionTrackingPolicy, and failoverPolicy. haPolicy
+	// requires customers to be responsible for tracking backend endpoint health and electing a
+	// leader among the healthy endpoints. Therefore, haPolicy cannot be specified with healthChecks.
+	// haPolicy can only be specified for External Passthrough Network Load Balancers and Internal
+	// Passthrough Network Load Balancers.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	HaPolicy *HaPolicyParameters `json:"haPolicy,omitempty" tf:"ha_policy,omitempty"`
 
 	// The set of URLs to HealthCheck resources for health checking
 	// this RegionBackendService. Currently at most one health
@@ -2034,9 +2377,16 @@ type RegionBackendServiceParameters struct {
 	LogConfig *RegionBackendServiceLogConfigParameters `json:"logConfig,omitempty" tf:"log_config,omitempty"`
 
 	// The URL of the network to which this backend service belongs.
-	// This field can only be specified when the load balancing scheme is set to INTERNAL.
+	// This field must be set for Internal Passthrough Network Load Balancers when the haPolicy is enabled, and for External Passthrough Network Load Balancers when the haPolicy fastIpMove is enabled.
+	// This field can only be specified when the load balancing scheme is set to INTERNAL, or when the load balancing scheme is set to EXTERNAL and haPolicy fastIpMove is enabled.
+	// Changes to this field force recreation of the resource.
 	// +kubebuilder:validation:Optional
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Configures traffic steering properties of internal passthrough Network Load Balancers.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	NetworkPassThroughLBTrafficPolicy *NetworkPassThroughLBTrafficPolicyParameters `json:"networkPassThroughLbTrafficPolicy,omitempty" tf:"network_pass_through_lb_traffic_policy,omitempty"`
 
 	// Settings controlling eviction of unhealthy hosts from the load balancing pool.
 	// This field is applicable only when the load_balancing_scheme is set
@@ -2044,6 +2394,11 @@ type RegionBackendServiceParameters struct {
 	// Structure is documented below.
 	// +kubebuilder:validation:Optional
 	OutlierDetection *OutlierDetectionParameters `json:"outlierDetection,omitempty" tf:"outlier_detection,omitempty"`
+
+	// Additional params passed with the request, but not persisted as part of resource payload
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	Params *ParamsParameters `json:"params,omitempty" tf:"params,omitempty"`
 
 	// A named port on a backend instance group representing the port for
 	// communication to the backend VMs in that group. Required when the
@@ -2089,12 +2444,55 @@ type RegionBackendServiceParameters struct {
 	// +kubebuilder:validation:Optional
 	Subsetting *SubsettingParameters `json:"subsetting,omitempty" tf:"subsetting,omitempty"`
 
+	// Configuration for Backend Authenticated TLS and mTLS. May only be specified when the backend protocol is SSL, HTTPS or HTTP2.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	TLSSettings *TLSSettingsParameters `json:"tlsSettings,omitempty" tf:"tls_settings,omitempty"`
+
 	// The backend service timeout has a different meaning depending on the type of load balancer.
 	// For more information see, Backend service settings.
 	// The default is 30 seconds.
 	// The full range of timeout values allowed goes from 1 through 2,147,483,647 seconds.
 	// +kubebuilder:validation:Optional
 	TimeoutSec *float64 `json:"timeoutSec,omitempty" tf:"timeout_sec,omitempty"`
+}
+
+type RequestHeadersInitParameters struct {
+
+	// The header name to match on for logging.
+	HeaderName *string `json:"headerName,omitempty" tf:"header_name,omitempty"`
+}
+
+type RequestHeadersObservation struct {
+
+	// The header name to match on for logging.
+	HeaderName *string `json:"headerName,omitempty" tf:"header_name,omitempty"`
+}
+
+type RequestHeadersParameters struct {
+
+	// The header name to match on for logging.
+	// +kubebuilder:validation:Optional
+	HeaderName *string `json:"headerName" tf:"header_name,omitempty"`
+}
+
+type ResponseHeadersInitParameters struct {
+
+	// The header name to match on for logging.
+	HeaderName *string `json:"headerName,omitempty" tf:"header_name,omitempty"`
+}
+
+type ResponseHeadersObservation struct {
+
+	// The header name to match on for logging.
+	HeaderName *string `json:"headerName,omitempty" tf:"header_name,omitempty"`
+}
+
+type ResponseHeadersParameters struct {
+
+	// The header name to match on for logging.
+	// +kubebuilder:validation:Optional
+	HeaderName *string `json:"headerName" tf:"header_name,omitempty"`
 }
 
 type StrongSessionAffinityCookieInitParameters struct {
@@ -2180,6 +2578,35 @@ type StrongSessionAffinityCookieTTLParameters struct {
 	Seconds *float64 `json:"seconds" tf:"seconds,omitempty"`
 }
 
+type SubjectAltNamesInitParameters struct {
+
+	// The SAN specified as a DNS Name.
+	DNSName *string `json:"dnsName,omitempty" tf:"dns_name,omitempty"`
+
+	// The SAN specified as a URI.
+	UniformResourceIdentifier *string `json:"uniformResourceIdentifier,omitempty" tf:"uniform_resource_identifier,omitempty"`
+}
+
+type SubjectAltNamesObservation struct {
+
+	// The SAN specified as a DNS Name.
+	DNSName *string `json:"dnsName,omitempty" tf:"dns_name,omitempty"`
+
+	// The SAN specified as a URI.
+	UniformResourceIdentifier *string `json:"uniformResourceIdentifier,omitempty" tf:"uniform_resource_identifier,omitempty"`
+}
+
+type SubjectAltNamesParameters struct {
+
+	// The SAN specified as a DNS Name.
+	// +kubebuilder:validation:Optional
+	DNSName *string `json:"dnsName,omitempty" tf:"dns_name,omitempty"`
+
+	// The SAN specified as a URI.
+	// +kubebuilder:validation:Optional
+	UniformResourceIdentifier *string `json:"uniformResourceIdentifier,omitempty" tf:"uniform_resource_identifier,omitempty"`
+}
+
 type SubsettingInitParameters struct {
 
 	// The algorithm used for subsetting.
@@ -2230,6 +2657,75 @@ type SubsettingParameters struct {
 	SubsetSize *float64 `json:"subsetSize,omitempty" tf:"subset_size,omitempty"`
 }
 
+type TLSSettingsInitParameters struct {
+
+	// Reference to the BackendAuthenticationConfig resource from the networksecurity.googleapis.com namespace.
+	// Can be used in authenticating TLS connections to the backend, as specified by the authenticationMode field.
+	// Can only be specified if authenticationMode is not NONE.
+	AuthenticationConfig *string `json:"authenticationConfig,omitempty" tf:"authentication_config,omitempty"`
+
+	// Server Name Indication - see RFC3546 section 3.1. If set, the load balancer sends this string as the SNI hostname in the
+	// TLS connection to the backend, and requires that this string match a Subject Alternative Name (SAN) in the backend's
+	// server certificate. With a Regional Internet NEG backend, if the SNI is specified here, the load balancer uses it
+	// regardless of whether the Regional Internet NEG is specified with FQDN or IP address and port.
+	Sni *string `json:"sni,omitempty" tf:"sni,omitempty"`
+
+	// A list of Subject Alternative Names (SANs) that the Load Balancer verifies during a TLS handshake with the backend.
+	// When the server presents its X.509 certificate to the Load Balancer, the Load Balancer inspects the certificate's SAN field,
+	// and requires that at least one SAN match one of the subjectAltNames in the list. This field is limited to 5 entries.
+	// When both sni and subjectAltNames are specified, the load balancer matches the backend certificate's SAN only to
+	// subjectAltNames.
+	// Structure is documented below.
+	SubjectAltNames []SubjectAltNamesInitParameters `json:"subjectAltNames,omitempty" tf:"subject_alt_names,omitempty"`
+}
+
+type TLSSettingsObservation struct {
+
+	// Reference to the BackendAuthenticationConfig resource from the networksecurity.googleapis.com namespace.
+	// Can be used in authenticating TLS connections to the backend, as specified by the authenticationMode field.
+	// Can only be specified if authenticationMode is not NONE.
+	AuthenticationConfig *string `json:"authenticationConfig,omitempty" tf:"authentication_config,omitempty"`
+
+	// Server Name Indication - see RFC3546 section 3.1. If set, the load balancer sends this string as the SNI hostname in the
+	// TLS connection to the backend, and requires that this string match a Subject Alternative Name (SAN) in the backend's
+	// server certificate. With a Regional Internet NEG backend, if the SNI is specified here, the load balancer uses it
+	// regardless of whether the Regional Internet NEG is specified with FQDN or IP address and port.
+	Sni *string `json:"sni,omitempty" tf:"sni,omitempty"`
+
+	// A list of Subject Alternative Names (SANs) that the Load Balancer verifies during a TLS handshake with the backend.
+	// When the server presents its X.509 certificate to the Load Balancer, the Load Balancer inspects the certificate's SAN field,
+	// and requires that at least one SAN match one of the subjectAltNames in the list. This field is limited to 5 entries.
+	// When both sni and subjectAltNames are specified, the load balancer matches the backend certificate's SAN only to
+	// subjectAltNames.
+	// Structure is documented below.
+	SubjectAltNames []SubjectAltNamesObservation `json:"subjectAltNames,omitempty" tf:"subject_alt_names,omitempty"`
+}
+
+type TLSSettingsParameters struct {
+
+	// Reference to the BackendAuthenticationConfig resource from the networksecurity.googleapis.com namespace.
+	// Can be used in authenticating TLS connections to the backend, as specified by the authenticationMode field.
+	// Can only be specified if authenticationMode is not NONE.
+	// +kubebuilder:validation:Optional
+	AuthenticationConfig *string `json:"authenticationConfig,omitempty" tf:"authentication_config,omitempty"`
+
+	// Server Name Indication - see RFC3546 section 3.1. If set, the load balancer sends this string as the SNI hostname in the
+	// TLS connection to the backend, and requires that this string match a Subject Alternative Name (SAN) in the backend's
+	// server certificate. With a Regional Internet NEG backend, if the SNI is specified here, the load balancer uses it
+	// regardless of whether the Regional Internet NEG is specified with FQDN or IP address and port.
+	// +kubebuilder:validation:Optional
+	Sni *string `json:"sni,omitempty" tf:"sni,omitempty"`
+
+	// A list of Subject Alternative Names (SANs) that the Load Balancer verifies during a TLS handshake with the backend.
+	// When the server presents its X.509 certificate to the Load Balancer, the Load Balancer inspects the certificate's SAN field,
+	// and requires that at least one SAN match one of the subjectAltNames in the list. This field is limited to 5 entries.
+	// When both sni and subjectAltNames are specified, the load balancer matches the backend certificate's SAN only to
+	// subjectAltNames.
+	// Structure is documented below.
+	// +kubebuilder:validation:Optional
+	SubjectAltNames []SubjectAltNamesParameters `json:"subjectAltNames,omitempty" tf:"subject_alt_names,omitempty"`
+}
+
 type TTLInitParameters struct {
 
 	// Span of time that's a fraction of a second at nanosecond
@@ -2269,6 +2765,53 @@ type TTLParameters struct {
 	// Must be from 0 to 315,576,000,000 inclusive.
 	// +kubebuilder:validation:Optional
 	Seconds *float64 `json:"seconds" tf:"seconds,omitempty"`
+}
+
+type ZonalAffinityInitParameters struct {
+
+	// This field indicates whether zonal affinity is enabled or not.
+	// Default value is ZONAL_AFFINITY_DISABLED.
+	// Possible values are: ZONAL_AFFINITY_DISABLED, ZONAL_AFFINITY_SPILL_CROSS_ZONE, ZONAL_AFFINITY_STAY_WITHIN_ZONE.
+	Spillover *string `json:"spillover,omitempty" tf:"spillover,omitempty"`
+
+	// The value of the field must be in [0, 1]. When the ratio of the count of healthy backend endpoints in a zone
+	// to the count of backend endpoints in that same zone is equal to or above this threshold, the load balancer
+	// distributes new connections to all healthy endpoints in the local zone only. When the ratio of the count
+	// of healthy backend endpoints in a zone to the count of backend endpoints in that same zone is below this
+	// threshold, the load balancer distributes all new connections to all healthy endpoints across all zones.
+	SpilloverRatio *float64 `json:"spilloverRatio,omitempty" tf:"spillover_ratio,omitempty"`
+}
+
+type ZonalAffinityObservation struct {
+
+	// This field indicates whether zonal affinity is enabled or not.
+	// Default value is ZONAL_AFFINITY_DISABLED.
+	// Possible values are: ZONAL_AFFINITY_DISABLED, ZONAL_AFFINITY_SPILL_CROSS_ZONE, ZONAL_AFFINITY_STAY_WITHIN_ZONE.
+	Spillover *string `json:"spillover,omitempty" tf:"spillover,omitempty"`
+
+	// The value of the field must be in [0, 1]. When the ratio of the count of healthy backend endpoints in a zone
+	// to the count of backend endpoints in that same zone is equal to or above this threshold, the load balancer
+	// distributes new connections to all healthy endpoints in the local zone only. When the ratio of the count
+	// of healthy backend endpoints in a zone to the count of backend endpoints in that same zone is below this
+	// threshold, the load balancer distributes all new connections to all healthy endpoints across all zones.
+	SpilloverRatio *float64 `json:"spilloverRatio,omitempty" tf:"spillover_ratio,omitempty"`
+}
+
+type ZonalAffinityParameters struct {
+
+	// This field indicates whether zonal affinity is enabled or not.
+	// Default value is ZONAL_AFFINITY_DISABLED.
+	// Possible values are: ZONAL_AFFINITY_DISABLED, ZONAL_AFFINITY_SPILL_CROSS_ZONE, ZONAL_AFFINITY_STAY_WITHIN_ZONE.
+	// +kubebuilder:validation:Optional
+	Spillover *string `json:"spillover,omitempty" tf:"spillover,omitempty"`
+
+	// The value of the field must be in [0, 1]. When the ratio of the count of healthy backend endpoints in a zone
+	// to the count of backend endpoints in that same zone is equal to or above this threshold, the load balancer
+	// distributes new connections to all healthy endpoints in the local zone only. When the ratio of the count
+	// of healthy backend endpoints in a zone to the count of backend endpoints in that same zone is below this
+	// threshold, the load balancer distributes all new connections to all healthy endpoints across all zones.
+	// +kubebuilder:validation:Optional
+	SpilloverRatio *float64 `json:"spilloverRatio,omitempty" tf:"spillover_ratio,omitempty"`
 }
 
 // RegionBackendServiceSpec defines the desired state of RegionBackendService

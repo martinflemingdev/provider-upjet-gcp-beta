@@ -1,0 +1,56 @@
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: RepositoryReleaseConfig
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryreleaseconfig
+  labels:
+    testing.upbound.io/example-name: release
+  name: release
+spec:
+  forProvider:
+    codeCompilationConfig:
+    - assertionSchema: example-assertion-dataset
+      databaseSuffix: ""
+      defaultDatabase: gcp-example-project
+      defaultLocation: us-central1
+      defaultSchema: example-dataset
+      schemaSuffix: ""
+      tablePrefix: ""
+      vars:
+        var1: value
+    cronSchedule: 0 7 * * *
+    gitCommitish: main
+    projectSelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    provider: ${google-beta}
+    regionSelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    repositorySelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    timeZone: America/New_York
+
+---
+
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: Repository
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryreleaseconfig
+  labels:
+    testing.upbound.io/example-name: repository
+  name: repository
+spec:
+  forProvider:
+    gitRemoteSettings:
+    - authenticationTokenSecretVersion: ${google_secret_manager_secret_version.secret_version.id}
+      defaultBranch: main
+      url: ${google_sourcerepo_repository.git_repository.url}
+    provider: ${google-beta}
+    region: us-central1
+    workspaceCompilationOverrides:
+    - defaultDatabase: database
+      schemaSuffix: _suffix
+      tablePrefix: prefix_

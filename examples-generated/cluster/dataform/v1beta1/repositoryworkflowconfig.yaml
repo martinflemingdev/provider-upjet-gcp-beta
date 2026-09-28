@@ -1,0 +1,115 @@
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: RepositoryWorkflowConfig
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryworkflowconfig
+  labels:
+    testing.upbound.io/example-name: workflow
+  name: workflow
+spec:
+  forProvider:
+    cronSchedule: 0 7 * * *
+    invocationConfig:
+    - fullyRefreshIncrementalTablesEnabled: false
+      includedTags:
+      - tag_1
+      includedTargets:
+      - database: gcp-example-project
+        name: target_1
+        schema: example-dataset
+      - database: gcp-example-project
+        name: target_2
+        schema: example-dataset
+      serviceAccountSelector:
+        matchLabels:
+          testing.upbound.io/example-name: dataform_sa
+      transitiveDependenciesIncluded: true
+      transitiveDependentsIncluded: true
+    projectSelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    provider: ${google-beta}
+    regionSelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    releaseConfigSelector:
+      matchLabels:
+        testing.upbound.io/example-name: release_config
+    repositorySelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    timeZone: America/New_York
+
+---
+
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: Repository
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryworkflowconfig
+  labels:
+    testing.upbound.io/example-name: repository
+  name: repository
+spec:
+  forProvider:
+    gitRemoteSettings:
+    - authenticationTokenSecretVersion: ${google_secret_manager_secret_version.secret_version.id}
+      defaultBranch: main
+      url: ${google_sourcerepo_repository.git_repository.url}
+    provider: ${google-beta}
+    region: us-central1
+    workspaceCompilationOverrides:
+    - defaultDatabase: database
+      schemaSuffix: _suffix
+      tablePrefix: prefix_
+
+---
+
+apiVersion: dataform.gcp-beta.upbound.io/v1beta1
+kind: RepositoryReleaseConfig
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryworkflowconfig
+  labels:
+    testing.upbound.io/example-name: release_config
+  name: release-config
+spec:
+  forProvider:
+    codeCompilationConfig:
+    - assertionSchema: example-assertion-dataset
+      databaseSuffix: ""
+      defaultDatabase: gcp-example-project
+      defaultLocation: us-central1
+      defaultSchema: example-dataset
+      schemaSuffix: ""
+      tablePrefix: ""
+      vars:
+        var1: value
+    cronSchedule: 0 7 * * *
+    gitCommitish: main
+    projectSelector:
+      matchLabels:
+        testing.upbound.io/example-name: repository
+    provider: ${google-beta}
+    regionSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    repositorySelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    timeZone: America/New_York
+
+---
+
+apiVersion: cloudplatform.gcp-beta.upbound.io/v1beta1
+kind: ServiceAccount
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dataform/v1beta1/repositoryworkflowconfig
+  labels:
+    testing.upbound.io/example-name: dataform_sa
+  name: dataform-sa
+spec:
+  forProvider:
+    displayName: Dataform Service Account
+    provider: ${google-beta}
